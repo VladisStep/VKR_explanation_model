@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import shap
 import matplotlib
 from sklearn.metrics import classification_report
@@ -25,7 +26,6 @@ def shap_svm():
     shap_display = shap.force_plot(explainer.expected_value[0], shap_values[0], data_for_prediction, link="logit")
     shap.save_html('/Users/vladis_step/VKR_explanation_model/Shap/HandPD/Graphs/graph.html', shap_display)
 
-
 def shap_rfc():
     rfc = load(RFC_model_filename)
     view = shap.TreeExplainer(rfc)
@@ -43,7 +43,7 @@ def shap_rfc():
 def print_acc(classifier, X_test, Y_test):
     preds = classifier.predict(X_test)
     print(classification_report(Y_test, preds))
-    # print('The accuracy of this model is :\t', metrics.accuracy_score(preds, Y_test))
+    print('The accuracy of this model is :\t', metrics.accuracy_score(preds, Y_test))
 
 
 if __name__ == "__main__":
@@ -52,4 +52,8 @@ if __name__ == "__main__":
     test_size = 0.5
     X, Y = load_hand_pd()
     X_train, X_test, Y_train, Y_test = train_test_split(*[X, Y], test_size=test_size, random_state=0)
+
+    shap_svm()
     shap_rfc()
+    shap_xgb()
+    shap_knn()

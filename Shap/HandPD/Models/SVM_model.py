@@ -1,12 +1,18 @@
+from sklearn.calibration import CalibratedClassifierCV
+from sklearn.linear_model import SGDClassifier
 from sklearn.model_selection import train_test_split
 from Shap.HandPD.data import load_hand_pd
 from joblib import dump
-from sklearn.svm import SVC
+from sklearn.svm import SVC, LinearSVC
+
+path_to_project = 'C:/GitReps/VKR_explanation_model/'
 
 
 def create_SVM(filename, X_train, Y_train):
     # train a SVM classifier
     svm = SVC(kernel='linear', probability=True)
+    # For large datasets consider using LinearSVC or SGDClassifier
+    # svm = SGDClassifier(loss='hinge',class_weight='balanced')
     svm.fit(X_train, Y_train)
 
     # save model

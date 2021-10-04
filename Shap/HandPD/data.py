@@ -3,10 +3,12 @@ import numpy as np
 from sklearn import preprocessing
 
 
+
 def load_hand_pd():
     df = pd.read_csv("/Users/vladis_step/VKR_explanation_model/Datasets/HandPD-dataset.csv")  # import dataset
 
     le = preprocessing.LabelEncoder()
+    df['CLASS_TYPE'] = le.fit_transform(df['CLASS_TYPE'])
     df['GENDER'] = le.fit_transform(df['GENDER'])
     df['RIGH/LEFT-HANDED'] = le.fit_transform(df['RIGH/LEFT-HANDED'])
 

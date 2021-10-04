@@ -5,6 +5,9 @@ from joblib import dump
 
 # https://www.kaggle.com/claytonteybauru/spiral-handpd-recogna
 
+path_to_project = 'C:/GitReps/VKR_explanation_model/'
+
+
 def create_RFC(filename, X_train, Y_train):
     # train a RFC classifier
     # random_forest = RandomForestClassifier(n_estimators=100, n_jobs=-1, random_state=0)
