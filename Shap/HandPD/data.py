@@ -2,10 +2,11 @@ import pandas as pd
 import numpy as np
 from sklearn import preprocessing
 
+path_to_project = 'C:/GitReps/VKR_explanation_model/'
 
 
 def load_hand_pd():
-    df = pd.read_csv("/Users/vladis_step/VKR_explanation_model/Datasets/HandPD-dataset.csv")  # import dataset
+    df = pd.read_csv(path_to_project + "Datasets/HandPD-dataset.csv")  # import dataset
 
     le = preprocessing.LabelEncoder()
     df['CLASS_TYPE'] = le.fit_transform(df['CLASS_TYPE'])

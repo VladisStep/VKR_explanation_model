@@ -22,4 +22,4 @@ if __name__ == "__main__":
     test_size = 0.5
     X, Y = load_hand_pd()
     X_train, X_test, Y_train, Y_test = train_test_split(*[X, Y], test_size=test_size, random_state=0)
-    create_RFC("/Users/vladis_step/VKR_explanation_model/Models/RFC.joblib", X_train, Y_train)
+    create_RFC(path_to_project + "Models/RFC.joblib", X_train, Y_train)
