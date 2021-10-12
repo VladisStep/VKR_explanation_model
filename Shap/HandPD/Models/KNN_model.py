@@ -2,9 +2,10 @@ from joblib import dump
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 
+import my_utils
 from Shap.HandPD.data import load_hand_pd
 
-path_to_project = 'C:/GitReps/VKR_explanation_model/'
+path_to_project = my_utils.path_to_project
 
 
 def create_KNN(filename, X_train, Y_train):

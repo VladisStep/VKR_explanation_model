@@ -1,18 +1,20 @@
+from joblib import dump
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
+
+import my_utils
 from Shap.HandPD.data import load_hand_pd
-from joblib import dump
 
 # https://www.kaggle.com/claytonteybauru/spiral-handpd-recogna
 
-path_to_project = 'C:/GitReps/VKR_explanation_model/'
+path_to_project = my_utils.path_to_project
 
 
 def create_RFC(filename, X_train, Y_train):
     # train a RFC classifier
     # random_forest = RandomForestClassifier(n_estimators=100, n_jobs=-1, random_state=0)
     random_forest = RandomForestClassifier(n_estimators=100)
-    random_forest.fit(X_train, Y_train)
+    random_forest.fit(X_train.values, Y_train)
 
     # save model
     dump(random_forest, filename)

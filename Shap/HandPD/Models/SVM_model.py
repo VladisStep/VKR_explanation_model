@@ -1,11 +1,11 @@
-from sklearn.calibration import CalibratedClassifierCV
-from sklearn.linear_model import SGDClassifier
-from sklearn.model_selection import train_test_split
-from Shap.HandPD.data import load_hand_pd
 from joblib import dump
-from sklearn.svm import SVC, LinearSVC
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
 
-path_to_project = 'C:/GitReps/VKR_explanation_model/'
+import my_utils
+from Shap.HandPD.data import load_hand_pd
+
+path_to_project = my_utils.path_to_project
 
 
 def create_SVM(filename, X_train, Y_train):

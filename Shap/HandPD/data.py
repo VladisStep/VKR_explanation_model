@@ -1,14 +1,17 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 from sklearn import preprocessing
 
-path_to_project = 'C:/GitReps/VKR_explanation_model/'
+import my_utils
+
+path_to_project = my_utils.path_to_project
 
 
 def load_hand_pd():
     df = pd.read_csv(path_to_project + "Datasets/HandPD-dataset.csv")  # import dataset
 
     le = preprocessing.LabelEncoder()
+    # df = df.apply(le.fit_transform)
     df['CLASS_TYPE'] = le.fit_transform(df['CLASS_TYPE'])
     df['GENDER'] = le.fit_transform(df['GENDER'])
     df['RIGH/LEFT-HANDED'] = le.fit_transform(df['RIGH/LEFT-HANDED'])
