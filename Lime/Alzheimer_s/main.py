@@ -57,7 +57,7 @@ explanation = explainer.explain_instance(chosen_img,
                                          num_samples=num_samples)
 
 temp, mask = explanation.get_image_and_mask(model.predict(chosen_img.reshape((1, IMG_WIDTH, IMG_HEIGHT, 3))).argmax(axis=1)[0],
-                                            positive_only=True, hide_rest=False)
+                                            positive_only=False, hide_rest=False)
 
 plt.axis("off")
 # plt.title("Explanation: " + str(round(pred_for_title[0], 3)) + "% sure it's " + str(pred_for_title[1]))
