@@ -16,18 +16,18 @@ BATCH_SIZE = 16
 train_ds, val_ds, test_ds = load_data_alzheimer()
 model = keras.models.load_model('/Users/vladis_step/VKR_explanation_model/Models/alzheimer_model.h5')
 
-# counter = 0
-# count_of_elements = 0
-# for next_element in val_ds:
-#     # tf.print(next_element)
-#     d = model.predict(next_element[0])
-#     for i in range(BATCH_SIZE - 1):
-#         # print(np.argmax(d[i]), np.array(next_element[1])[i])
-#         if np.argmax(d[i]) == np.array(next_element[1])[i]:
-#             counter += 1
-#         count_of_elements += 1
-#
-# print("Accuracy: ", counter / count_of_elements)
+counter = 0
+count_of_elements = 0
+for next_element in val_ds:
+    # tf.print(next_element)
+    d = model.predict(next_element[0])
+    for i in range(BATCH_SIZE - 1):
+        # print(np.argmax(d[i]), np.array(next_element[1])[i])
+        if np.argmax(d[i]) == np.array(next_element[1])[i]:
+            counter += 1
+        count_of_elements += 1
+
+print("Accuracy: ", counter / count_of_elements)
 
 
 
@@ -37,7 +37,7 @@ model = keras.models.load_model('/Users/vladis_step/VKR_explanation_model/Models
 
 IMG_WIDTH, IMG_HEIGHT = (176, 208)
 
-path_to_img_to_explain = path_to_project + "Datasets/Alzheimer_s Dataset/test/MildDemented/26.jpg"
+path_to_img_to_explain = path_to_project + "Datasets/Alzheimer_s Dataset/test/ModerateDemented/27.jpg"
 chosen_img = image.img_to_array(load_img(path=path_to_img_to_explain,
                                          target_size=(IMG_WIDTH, IMG_HEIGHT))).astype('double') / 255
 

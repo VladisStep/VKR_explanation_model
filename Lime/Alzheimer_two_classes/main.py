@@ -1,15 +1,13 @@
-import numpy as np
-from tensorflow import keras
-
-import my_utils
 import numpy
-from keras.models import load_model
-from matplotlib import pyplot as plt
-from Lime.Parkinson_drawings.data import load_data_parkinson_drawings_model
-from tensorflow.keras.preprocessing import image
+import numpy as np
 from keras.preprocessing.image import load_img
 from lime import lime_image
+from matplotlib import pyplot as plt
 from skimage.segmentation import mark_boundaries
+from tensorflow import keras
+from tensorflow.keras.preprocessing import image
+
+import my_utils
 from Lime.Alzheimer_two_classes.data import load_data_alzheimer_two_classes
 
 path_to_project = my_utils.path_to_project
@@ -112,8 +110,8 @@ for i in range(len(img_path)):
 # dict_heatmap = dict(explanation.local_exp[ind])
 # heatmap = numpy.vectorize(dict_heatmap.get)(explanation.segments)
 
-dict_heatmap1 = dict(explanation.local_exp[explanation.top_labels[0]])
-heatmap1 = np.vectorize(dict_heatmap1.get)(explanation.segments)
+# dict_heatmap1 = dict(explanation.local_exp[explanation.top_labels[0]])
+# heatmap1 = np.vectorize(dict_heatmap1.get)(explanation.segments)
 
 # Plot. The visualization makes more sense if a symmetrical colorbar is used.
 
