@@ -23,34 +23,14 @@ def shap_svm():
     method_name = "SVM"
 
     svm = load(SVM_model_filename)
+    explainer = shap.KernelExplainer(svm.predict_proba, X_train.values)
 
     # which row from data should shap show?
     choosen_instance = 5
     data_for_prediction = X_test.iloc[choosen_instance]
 
-    # explainer = shap.KernelExplainer(svm.predict_proba, X_train.values, link="logit")
-    explainer = shap.KernelExplainer(svm.predict_proba, X_train.values)
-    print_acc(svm, X_test, Y_test, method_name)
-    plot_graphs(explainer, data_for_prediction, X_train, method_name)
-
-    # shap_values = explainer.shap_values(data_for_prediction, nsamples=100)
-    # shap_display = shap.force_plot(explainer.expected_value[0], shap_values[0], data_for_prediction, link="logit")
-    # shap.save_html(path_to_project + 'Shap/HandPD/Graphs/svm_force_plot.html', shap_display)
-    #
-    # print_acc(svm, X_test, Y_test, method_name)
-    #
-    # shap.plots._waterfall.waterfall_legacy(explainer.expected_value[0], shap_values[0], data_for_prediction, show=False)
-    # plt.savefig(path_to_project + 'Shap/HandPD/Graphs/svm_waterfall.png')
-    # plt.clf()
-    #
-    # shap_values = explainer.shap_values(X_train)
-    # shap.summary_plot(shap_values, X_train, show=False)
-    # plt.savefig(path_to_project + 'Shap/HandPD/Graphs/svm_summary.png')
-    # plt.clf()
-    #
-    # shap.plots.heatmap(shap_values, show=False)
-    # plt.savefig(path_to_project + 'Shap/HandPD/Graphs/svm_heatmap.png')
-    # plt.clf()
+    print_acc(svm, X_test, Y_test, method_name, data_for_prediction.values.reshape(1, -1))
+    # plot_graphs(explainer, data_for_prediction, X_train, method_name)
 
 
 def shap_rfc():
@@ -59,35 +39,12 @@ def shap_rfc():
     rfc = load(RFC_model_filename)
     view = shap.TreeExplainer(rfc)
     # view = shap.KernelExplainer(rfc.predict_proba, X_train.values)
-    # shap.summary_plot(shap_values[1], X_train)
 
     choosen_instance = 5
     data_for_prediction = X_test.iloc[choosen_instance]
-    # data_for_prediction_array = data_for_prediction.values.reshape(1, -1)
-    # print("Prediction: " + rfc.predict(data_for_prediction_array))
 
-    print_acc(rfc, X_test, Y_test, method_name)
-    plot_graphs(view, data_for_prediction, X_train, method_name)
-
-    # shap_values = view.shap_values(data_for_prediction)
-
-    # shap_display = shap.force_plot(view.expected_value[0], shap_values[0], data_for_prediction)
-    # shap.save_html(path_to_project + 'Shap/HandPD/Graphs/rfc_force_plot.html', shap_display)
-    #
-    # print_acc(rfc, X_test, Y_test, method_name)
-    #
-    # shap.plots._waterfall.waterfall_legacy(view.expected_value[0], shap_values[0], data_for_prediction, show=False)
-    # plt.savefig(path_to_project + 'Shap/HandPD/Graphs/rfc_waterfall.png')
-    # plt.clf()
-    #
-    # shap_values = view.shap_values(X_train)
-    # shap.summary_plot(shap_values, X_train, show=False)
-    # plt.savefig(path_to_project + 'Shap/HandPD/Graphs/rfc_summary.png')
-    # plt.clf()
-    #
-    # shap.plots.heatmap(shap_values, show=False)
-    # plt.savefig(path_to_project + 'Shap/HandPD/Graphs/rfc_heatmap.png')
-    # plt.clf()
+    print_acc(rfc, X_test, Y_test, method_name, data_for_prediction.values.reshape(1, -1))
+    # plot_graphs(view, data_for_prediction, X_train, method_name)
 
 
 def shap_knn():
@@ -98,34 +55,14 @@ def shap_knn():
 
     choosen_instance = 5
     data_for_prediction = X_test.iloc[choosen_instance]
-    # data_for_prediction_array = data_for_prediction.values.reshape(1, -1)
-    # print("Prediction: " + knn.predict_proba(data_for_prediction_array))
 
-    print_acc(knn, X_test, Y_test, method_name)
-    plot_graphs(view, data_for_prediction, X_train, method_name)
-
-    # shap_values = view.shap_values(data_for_prediction)
-    # shap_display = shap.force_plot(view.expected_value[0], shap_values[0], data_for_prediction)
-    # shap.save_html(path_to_project + 'Shap/HandPD/Graphs/knn_force_plot.html', shap_display)
-    #
-    # print_acc(knn, X_test, Y_test, method_name)
-    #
-    # shap.plots._waterfall.waterfall_legacy(view.expected_value[0], shap_values[0], data_for_prediction, show=False)
-    # plt.savefig(path_to_project + 'Shap/HandPD/Graphs/knn_waterfall.png')
-    # plt.clf()
-    #
-    # shap_values = view.shap_values(X_train)
-    # shap.summary_plot(shap_values, X_train, show=False)
-    # plt.savefig(path_to_project + 'Shap/HandPD/Graphs/knn_summary.png')
-    # plt.clf()
-    #
-    # shap.plots.heatmap(shap_values, show=False)
-    # plt.savefig(path_to_project + 'Shap/HandPD/Graphs/knn_heatmap.png')
-    # plt.clf()
+    print_acc(knn, X_test, Y_test, method_name, data_for_prediction.values.reshape(1, -1))
+    # plot_graphs(view, data_for_prediction, X_train, method_name)
 
 
-def print_acc(classifier, X_test, Y_test, method_name):
+def print_acc(classifier, X_test, Y_test, method_name, data_for_prediction_array):
     print("-------------------------------------------------")
+    print("Prediction: ", classifier.predict_proba(data_for_prediction_array))
     print(method_name, ":")
     preds = classifier.predict(X_test.values)
     print(classification_report(Y_test, preds))
