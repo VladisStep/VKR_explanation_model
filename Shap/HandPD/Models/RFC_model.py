@@ -14,7 +14,7 @@ def create_RFC(filename, X_train, Y_train):
     # train a RFC classifier
     # random_forest = RandomForestClassifier(n_estimators=100, n_jobs=-1, random_state=0)
     random_forest = RandomForestClassifier(n_estimators=100)
-    random_forest.fit(X_train.values, Y_train)
+    random_forest.fit(X_train, Y_train)
 
     # save model
     dump(random_forest, filename)

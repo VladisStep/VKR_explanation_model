@@ -1,106 +1,142 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import shap
-import matplotlib
-import my_utils
-from sklearn.metrics import classification_report
-from sklearn.model_selection import train_test_split
-from Shap.HandPD.Models.SVM_model import create_SVM
-from Shap.HandPD.Models.RFC_model import create_RFC
-from data import load_hand_pd
 from joblib import load
 from sklearn import metrics
+from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split
 
-import warnings
-import sklearn.exceptions
-
-warnings.filterwarnings("ignore", category=sklearn.exceptions.UndefinedMetricWarning)
-
-path_to_project = my_utils.path_to_project
-
-
-def shap_svm():
-    # create_SVM(SVM_model_filename, X_train, Y_train)
-    method_name = "SVM"
-
-    svm = load(SVM_model_filename)
-    explainer = shap.KernelExplainer(svm.predict_proba, X_train.values)
-
-    # which row from data should shap show?
-    choosen_instance = 5
-    data_for_prediction = X_test.iloc[choosen_instance]
-
-    print_acc(svm, X_test, Y_test, method_name, data_for_prediction.values.reshape(1, -1))
-    # plot_graphs(explainer, data_for_prediction, X_train, method_name)
+import my_utils
+from Shap.HandPD.Models.KNN_model import create_KNN
+from Shap.HandPD.Models.NN_model import create_NN
+from Shap.HandPD.Models.RFC_model import create_RFC
+from Shap.HandPD.Models.SVM_model import create_SVM
+from Shap.HandPD.data import load_hand_pd
 
 
-def shap_rfc():
-    method_name = "RFC"
+class HandPDShap():
+    def __init__(self):
+        self.path_to_project = my_utils.path_to_project
+        self.RFC_model_filename = self.path_to_project + 'Models/RFC.joblib'
+        self.SVM_model_filename = self.path_to_project + 'Models/SVM.joblib'
+        self.KNN_model_filename = self.path_to_project + 'Models/KNN.joblib'
+        self.NN_model_filename = self.path_to_project + 'Models/NN.joblib'
+        self.dataset_name = 'HandPD'
 
-    rfc = load(RFC_model_filename)
-    view = shap.TreeExplainer(rfc)
-    # view = shap.KernelExplainer(rfc.predict_proba, X_train.values)
+        X, Y = load_hand_pd()
+        test_size = 0.5
+        self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(*[X, Y], test_size=test_size,
+                                                                                random_state=0)
 
-    choosen_instance = 5
-    data_for_prediction = X_test.iloc[choosen_instance]
+    def shap_svm(self, is_need_to_create_model, chosen_instance):
+        if is_need_to_create_model:
+            create_SVM(self.SVM_model_filename, self.X_train, self.Y_train)
+        method_name = "SVM"
 
-    print_acc(rfc, X_test, Y_test, method_name, data_for_prediction.values.reshape(1, -1))
-    # plot_graphs(view, data_for_prediction, X_train, method_name)
+        svm = load(self.SVM_model_filename)
+        explainer = shap.KernelExplainer(svm.predict_proba, self.X_train.values)
 
+        # which row from data should shap show?
+        data_for_prediction = self.X_test.iloc[chosen_instance]
 
-def shap_knn():
-    method_name = "KNN"
+        self.print_acc(svm, self.X_test, self.Y_test, method_name, data_for_prediction.values.reshape(1, -1))
+        self.plot_graphs(explainer, data_for_prediction, self.X_train, method_name)
 
-    knn = load(KNN_model_filename)
-    view = shap.KernelExplainer(knn.predict_proba, X_train.values)
+    def shap_rfc(self, is_need_to_create_model, chosen_instance):
+        if is_need_to_create_model:
+            create_RFC(self.RFC_model_filename, self.X_train, self.Y_train)
+        method_name = "RFC"
 
-    choosen_instance = 5
-    data_for_prediction = X_test.iloc[choosen_instance]
+        rfc = load(self.RFC_model_filename)
+        view = shap.TreeExplainer(rfc)
+        # view = shap.KernelExplainer(rfc.predict_proba, X_train.values)
 
-    print_acc(knn, X_test, Y_test, method_name, data_for_prediction.values.reshape(1, -1))
-    # plot_graphs(view, data_for_prediction, X_train, method_name)
+        data_for_prediction = self.X_test.iloc[chosen_instance]
 
+        self.print_acc(rfc, self.X_test, self.Y_test, method_name, data_for_prediction.values.reshape(1, -1))
+        self.plot_graphs(view, data_for_prediction, self.X_train, method_name)
 
-def print_acc(classifier, X_test, Y_test, method_name, data_for_prediction_array):
-    print("-------------------------------------------------")
-    print("Prediction: ", classifier.predict_proba(data_for_prediction_array))
-    print(method_name, ":")
-    preds = classifier.predict(X_test.values)
-    print(classification_report(Y_test, preds))
-    print('The accuracy of this model is :\t', metrics.accuracy_score(preds, Y_test))
+    def shap_knn(self, is_need_to_create_model, chosen_instance):
+        if is_need_to_create_model:
+            create_KNN(self.KNN_model_filename, self.X_train, self.Y_train)
+        method_name = "KNN"
 
+        knn = load(self.KNN_model_filename)
+        view = shap.KernelExplainer(knn.predict_proba, self.X_train.values)
 
-def plot_graphs(explainer, data_for_prediction, X, method_name):
-    shap_values = explainer.shap_values(data_for_prediction)
-    shap_display = shap.force_plot(explainer.expected_value[0], shap_values[0], data_for_prediction)
-    shap.save_html(path_to_project + 'Shap/HandPD/Graphs/' + method_name + '/force_plot.html', shap_display)
+        data_for_prediction = self.X_test.iloc[chosen_instance]
 
-    shap.plots._waterfall.waterfall_legacy(explainer.expected_value[0], shap_values[0], data_for_prediction, show=False)
-    plt.savefig(path_to_project + 'Shap/HandPD/Graphs/' + method_name + '/waterfall.png')
-    plt.clf()
+        self.print_acc(knn, self.X_test, self.Y_test, method_name, data_for_prediction.values.reshape(1, -1))
+        self.plot_graphs(view, data_for_prediction, self.X_train, method_name)
 
-    shap_values = explainer.shap_values(X)
-    shap.summary_plot(shap_values, X, show=False)
-    plt.savefig(path_to_project + 'Shap/HandPD/Graphs/' + method_name + '/summary.png')
-    plt.clf()
+    def shap_nn(self, is_need_to_create_model, chosen_instance):
+        if is_need_to_create_model:
+            create_NN(self.NN_model_filename, self.X_train, self.Y_train)
+        method_name = "NN"
 
-    # shap.plots.heatmap(shap_values[0], show=False)
-    # plt.savefig(path_to_project + 'Shap/HandPD/Graphs/' + method_name + '/heatmap_class0.png')
-    # plt.clf()
-    #
-    # shap.plots.heatmap(shap_values[1], show=False)
-    # plt.savefig(path_to_project + 'Shap/HandPD/Graphs/' + method_name + '/heatmap_class1.png')
-    # plt.clf()
+        nn = load(self.NN_model_filename)
+        view = shap.KernelExplainer(nn.predict, self.X_train.values)
+
+        data_for_prediction = self.X_test.iloc[chosen_instance]
+
+        print("-------------------------------------------------")
+        print("Prediction: ", nn.predict(data_for_prediction.values.reshape(1, -1)))
+        preds = np.round(nn.predict(self.X_test.values), 0).astype(int)
+        print('The accuracy of this model is :\t', metrics.accuracy_score(preds, self.Y_test))
+
+        shap_values = view.shap_values(self.X_train)
+        a = view.expected_value
+        b = shap_values[0]
+        c = self.X_train[0, :].values
+        d = self.X_train.columns.values
+        shap_display = shap.force_plot(view.expected_value, shap_values[0], self.X_train[0, :],
+                                       feature_names=self.X_train.columns.values)
+        shap.save_html(
+            self.path_to_project + 'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/force_plot.html',
+            shap_display)
+
+    def print_acc(self, classifier, X_test, Y_test, method_name, data_for_prediction_array):
+        print("-------------------------------------------------")
+        print("Prediction: ", classifier.predict_proba(data_for_prediction_array))
+        print(method_name, ":")
+        preds = classifier.predict(X_test.values)
+        print(classification_report(Y_test, preds))
+        print('The accuracy of this model is :\t', metrics.accuracy_score(preds, Y_test))
+
+    def plot_graphs(self, explainer, data_for_prediction, X, method_name):
+        shap_values = explainer.shap_values(data_for_prediction)
+        shap_display = shap.force_plot(explainer.expected_value[0], shap_values[0], data_for_prediction)
+        shap.save_html(self.path_to_project + 'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/force_plot.html', shap_display)
+
+        shap.plots._waterfall.waterfall_legacy(explainer.expected_value[0], shap_values[0], data_for_prediction,
+                                               show=False)
+        plt.savefig(self.path_to_project +'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/waterfall.png')
+        plt.clf()
+
+        shap_values = explainer.shap_values(X)
+        shap.summary_plot(shap_values, X, show=False)
+        plt.savefig(self.path_to_project + 'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/summary.png')
+        plt.clf()
+
+        shap.dependence_plot('GENDER', shap_values[1], self.X_train, interaction_index='AGE', show=False)
+        plt.savefig(self.path_to_project + 'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/dependence.png')
+        plt.clf()
+
+        # shap.plots.heatmap(shap_values[0], show=False)
+        # plt.savefig(path_to_project + 'Shap/HandPD/Graphs/' + method_name + '/heatmap_class0.png')
+        # plt.clf()
+        #
+        # shap.plots.heatmap(shap_values[1], show=False)
+        # plt.savefig(path_to_project + 'Shap/HandPD/Graphs/' + method_name + '/heatmap_class1.png')
+        # plt.clf()
 
 
 if __name__ == "__main__":
-    RFC_model_filename = path_to_project + 'Models/RFC.joblib'
-    SVM_model_filename = path_to_project + 'Models/SVM.joblib'
-    KNN_model_filename = path_to_project + 'Models/KNN.joblib'
+    handpdshap = HandPDShap()
 
-    test_size = 0.5
-    X, Y = load_hand_pd()
-    X_train, X_test, Y_train, Y_test = train_test_split(*[X, Y], test_size=test_size, random_state=0)
+    is_need_to_create = False
 
-    shap_svm()
-    shap_rfc()
-    shap_knn()
+    handpdshap.shap_svm(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    handpdshap.shap_rfc(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    handpdshap.shap_knn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # handpdshap.shap_nn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
