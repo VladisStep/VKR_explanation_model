@@ -10,7 +10,7 @@ def load_data_alzheimer_two_classes():
     IMAGE_SIZE = [176, 208]
 
     train_ds = tf.keras.preprocessing.image_dataset_from_directory(
-        path_to_project + "Datasets/Alzheimer_two_classes/train",
+        path_to_project + "Datasets/Alzheimer_two_classes/test",
         validation_split=0.2,
         subset="training",
         seed=1337,
@@ -19,7 +19,7 @@ def load_data_alzheimer_two_classes():
     )
 
     val_ds = tf.keras.preprocessing.image_dataset_from_directory(
-        path_to_project + "Datasets/Alzheimer_two_classes/train",
+        path_to_project + "Datasets/Alzheimer_two_classes/test",
         validation_split=0.2,
         subset="validation",
         seed=1337,

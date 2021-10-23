@@ -1,6 +1,6 @@
 from joblib import dump
 from sklearn.model_selection import train_test_split
-from sklearn.neural_network import MLPRegressor
+from sklearn.neural_network import MLPRegressor, MLPClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
@@ -29,8 +29,8 @@ def create_NN(filename, X_train, Y_train):
     #           callbacks=[model_checkpoint_callback])
     model = make_pipeline(
         StandardScaler(),
-        MLPRegressor(hidden_layer_sizes=(5,), activation='logistic', max_iter=10000, learning_rate='invscaling',
-                     random_state=0)
+        MLPClassifier(hidden_layer_sizes=(5,), activation='logistic', max_iter=10000, learning_rate='invscaling',
+                      random_state=0)
     )
     model.fit(X_train.values, Y_train)
 

@@ -85,11 +85,8 @@ class HandPDShap():
         print('The accuracy of this model is :\t', metrics.accuracy_score(preds, self.Y_test))
 
         shap_values = view.shap_values(self.X_train)
-        a = view.expected_value
-        b = shap_values[0]
-        c = self.X_train[0, :].values
-        d = self.X_train.columns.values
-        shap_display = shap.force_plot(view.expected_value, shap_values[0], self.X_train[0, :],
+
+        shap_display = shap.force_plot(view.expected_value, shap_values[0], self.X_train.values[0],
                                        feature_names=self.X_train.columns.values)
         shap.save_html(
             self.path_to_project + 'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/force_plot.html',
@@ -106,11 +103,13 @@ class HandPDShap():
     def plot_graphs(self, explainer, data_for_prediction, X, method_name):
         shap_values = explainer.shap_values(data_for_prediction)
         shap_display = shap.force_plot(explainer.expected_value[0], shap_values[0], data_for_prediction)
-        shap.save_html(self.path_to_project + 'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/force_plot.html', shap_display)
+        shap.save_html(
+            self.path_to_project + 'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/force_plot.html',
+            shap_display)
 
         shap.plots._waterfall.waterfall_legacy(explainer.expected_value[0], shap_values[0], data_for_prediction,
                                                show=False)
-        plt.savefig(self.path_to_project +'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/waterfall.png')
+        plt.savefig(self.path_to_project + 'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/waterfall.png')
         plt.clf()
 
         shap_values = explainer.shap_values(X)
@@ -139,4 +138,4 @@ if __name__ == "__main__":
     handpdshap.shap_svm(is_need_to_create_model=is_need_to_create, chosen_instance=5)
     handpdshap.shap_rfc(is_need_to_create_model=is_need_to_create, chosen_instance=5)
     handpdshap.shap_knn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
-    # handpdshap.shap_nn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    handpdshap.shap_nn(is_need_to_create_model=is_need_to_create, chosen_instance=5)

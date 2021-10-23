@@ -31,7 +31,7 @@ def calculate_accuracy():
     print("Accuracy: ", counter / count_of_elements)
 
 
-# calculate_accuracy()
+calculate_accuracy()
 
 
 IMG_WIDTH, IMG_HEIGHT = (176, 208)
@@ -58,7 +58,6 @@ img_path = [
     # "Datasets/Alzheimer_two_classes/test/NonDemented/26 (64).jpg",
     # "Datasets/Alzheimer_two_classes/test/NonDemented/26 (65).jpg",
     # "Datasets/Alzheimer_two_classes/test/NonDemented/26 (66).jpg",
-
 ]
 
 for i in range(len(img_path)):
@@ -94,7 +93,7 @@ for i in range(len(img_path)):
     plt.show()
 
     temp, mask = explanation.get_image_and_mask(1, negative_only=False, positive_only=False, hide_rest=False,
-                                                num_features=5)
+                                                num_features=30)
     plt.clf()
     plt.axis("off")
     plt.imshow(mark_boundaries(temp / 2 + 0.5, mask))
