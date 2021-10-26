@@ -1,7 +1,6 @@
-import numpy as np
 from joblib import dump
 from sklearn.ensemble import BaggingClassifier
-from sklearn.model_selection import train_test_split, RepeatedStratifiedKFold, cross_val_score
+from sklearn.model_selection import train_test_split
 
 import my_utils
 from Shap.HandPD.data import load_hand_pd

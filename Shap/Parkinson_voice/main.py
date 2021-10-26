@@ -104,6 +104,9 @@ if __name__ == "__main__":
 
     is_need_to_create = True
 
+    # ACC: 0.837
     parkinsonvoice.shap_svm(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # ACC: 0.898
     parkinsonvoice.shap_rfc(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # ACC: 0.857
     parkinsonvoice.shap_knn(is_need_to_create_model=is_need_to_create, chosen_instance=5)

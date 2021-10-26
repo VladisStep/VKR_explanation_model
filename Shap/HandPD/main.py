@@ -7,7 +7,7 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 
 import my_utils
-from Shap.HandPD.Models.ENS import create_ENS
+from Shap.HandPD.Models.ENS_model import create_ENS
 from Shap.HandPD.Models.KNN_model import create_KNN
 from Shap.HandPD.Models.NN_model import create_NN
 from Shap.HandPD.Models.RFC_model import create_RFC
@@ -90,7 +90,7 @@ class HandPDShap():
         method_name = "ENS"
 
         ens = load(self.ENS_model_filename)
-        view = shap.KernelExplainer(ens.predict, self.X_train.values)
+        view = shap.KernelExplainer(ens.predict_proba, self.X_train.values)
 
         data_for_prediction = self.X_test.iloc[chosen_instance]
 
@@ -142,7 +142,11 @@ if __name__ == "__main__":
 
     # ACC: 0.897
     handpdshap.shap_svm(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # ACC: 0.94
     handpdshap.shap_rfc(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    ACC: 0.815
     handpdshap.shap_knn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # ACC: 0.902
     handpdshap.shap_nn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # ACC: 0.951
     handpdshap.shap_ens(is_need_to_create_model=is_need_to_create, chosen_instance=5)
