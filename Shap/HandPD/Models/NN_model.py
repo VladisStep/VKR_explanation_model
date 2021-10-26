@@ -32,7 +32,7 @@ def create_NN(filename, X_train, Y_train):
         MLPClassifier(hidden_layer_sizes=(5,), activation='logistic', max_iter=10000, learning_rate='invscaling',
                       random_state=0)
     )
-    model.fit(X_train.values, Y_train)
+    model.fit(X_train, Y_train)
 
     dump(model, filename)
 

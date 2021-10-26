@@ -9,7 +9,9 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 
 import my_utils
+from Shap.HandPD.Models.ENS_model import create_ENS
 from Shap.HandPD.Models.KNN_model import create_KNN
+from Shap.HandPD.Models.NN_model import create_NN
 from Shap.HandPD.Models.RFC_model import create_RFC
 from Shap.HandPD.Models.SVM_model import create_SVM
 from Shap.Parkinson_voice.data import load_parkinson_voice
@@ -26,6 +28,7 @@ class ParkinsonVoiceShap:
         self.SVM_model_filename = self.path_to_project + 'Models/SVM.joblib'
         self.KNN_model_filename = self.path_to_project + 'Models/KNN.joblib'
         self.NN_model_filename = self.path_to_project + 'Models/NN.joblib'
+        self.ENS_model_filename = self.path_to_project + 'Models/ENS.joblib'
         self.dataset_name = 'Parkinson_voice'
 
         X, Y, self.feature_names = load_parkinson_voice()
@@ -72,6 +75,32 @@ class ParkinsonVoiceShap:
         self.print_acc(knn, self.X_test, self.Y_test, method_name, data_for_prediction.reshape(1, -1))
         self.plot_graphs(view, data_for_prediction, self.X_train, method_name)
 
+    def shap_nn(self, is_need_to_create_model, chosen_instance):
+        if is_need_to_create_model:
+            create_NN(self.NN_model_filename, self.X_train, self.Y_train)
+        method_name = "NN"
+
+        nn = load(self.NN_model_filename)
+        view = shap.KernelExplainer(nn.predict_proba, self.X_train)
+
+        data_for_prediction = self.X_test[chosen_instance]
+
+        self.print_acc(nn, self.X_test, self.Y_test, method_name, data_for_prediction.reshape(1, -1))
+        self.plot_graphs(view, data_for_prediction, self.X_train, method_name)
+
+    def shap_ens(self, is_need_to_create_model, chosen_instance):
+        if is_need_to_create_model:
+            create_ENS(self.ENS_model_filename, self.X_train, self.Y_train)
+        method_name = "ENS"
+
+        ens = load(self.ENS_model_filename)
+        view = shap.KernelExplainer(ens.predict_proba, self.X_train)
+
+        data_for_prediction = self.X_test[chosen_instance]
+
+        self.print_acc(ens, self.X_test, self.Y_test, method_name, data_for_prediction.reshape(1, -1))
+        self.plot_graphs(view, data_for_prediction, self.X_train, method_name)
+
     def print_acc(self, classifier, X_test, Y_test, method_name, data_for_prediction_array):
         print("-------------------------------------------------")
         print("Prediction: ", classifier.predict_proba(data_for_prediction_array))
@@ -110,3 +139,7 @@ if __name__ == "__main__":
     parkinsonvoice.shap_rfc(is_need_to_create_model=is_need_to_create, chosen_instance=5)
     # ACC: 0.857
     parkinsonvoice.shap_knn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # ACC: 0.867
+    parkinsonvoice.shap_nn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # ACC: 0.826
+    parkinsonvoice.shap_ens(is_need_to_create_model=is_need_to_create, chosen_instance=5)

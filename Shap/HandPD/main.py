@@ -144,7 +144,7 @@ if __name__ == "__main__":
     handpdshap.shap_svm(is_need_to_create_model=is_need_to_create, chosen_instance=5)
     # ACC: 0.94
     handpdshap.shap_rfc(is_need_to_create_model=is_need_to_create, chosen_instance=5)
-    ACC: 0.815
+    # ACC: 0.815
     handpdshap.shap_knn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
     # ACC: 0.902
     handpdshap.shap_nn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
