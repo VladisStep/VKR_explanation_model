@@ -7,6 +7,7 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 
 import my_utils
+from Shap.HandPD.Models.ENS import create_ENS
 from Shap.HandPD.Models.KNN_model import create_KNN
 from Shap.HandPD.Models.NN_model import create_NN
 from Shap.HandPD.Models.RFC_model import create_RFC
