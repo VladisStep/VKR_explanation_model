@@ -22,6 +22,7 @@ class HandPDShap():
         self.SVM_model_filename = self.path_to_project + 'Models/SVM.joblib'
         self.KNN_model_filename = self.path_to_project + 'Models/KNN.joblib'
         self.NN_model_filename = self.path_to_project + 'Models/NN.joblib'
+        self.ENS_model_filename = self.path_to_project + 'Models/ENS.joblib'
         self.dataset_name = 'HandPD'
 
         X, Y = load_hand_pd()
@@ -76,22 +77,25 @@ class HandPDShap():
         method_name = "NN"
 
         nn = load(self.NN_model_filename)
-        view = shap.KernelExplainer(nn.predict, self.X_train.values)
+        view = shap.KernelExplainer(nn.predict_proba, self.X_train.values)
 
         data_for_prediction = self.X_test.iloc[chosen_instance]
 
-        print("-------------------------------------------------")
-        print("Prediction: ", nn.predict(data_for_prediction.values.reshape(1, -1)))
-        preds = np.round(nn.predict(self.X_test.values), 0).astype(int)
-        print('The accuracy of this model is :\t', metrics.accuracy_score(preds, self.Y_test))
+        self.print_acc(nn, self.X_test, self.Y_test, method_name, data_for_prediction.values.reshape(1, -1))
+        self.plot_graphs(view, data_for_prediction, self.X_train, method_name)
 
-        shap_values = view.shap_values(self.X_train)
+    def shap_ens(self, is_need_to_create_model, chosen_instance):
+        if is_need_to_create_model:
+            create_ENS(self.ENS_model_filename, self.X_train, self.Y_train)
+        method_name = "ENS"
 
-        shap_display = shap.force_plot(view.expected_value, shap_values[0], self.X_train.values[0],
-                                       feature_names=self.X_train.columns.values)
-        shap.save_html(
-            self.path_to_project + 'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/force_plot.html',
-            shap_display)
+        ens = load(self.ENS_model_filename)
+        view = shap.KernelExplainer(ens.predict, self.X_train.values)
+
+        data_for_prediction = self.X_test.iloc[chosen_instance]
+
+        self.print_acc(ens, self.X_test, self.Y_test, method_name, data_for_prediction.values.reshape(1, -1))
+        self.plot_graphs(view, data_for_prediction, self.X_train, method_name)
 
     def print_acc(self, classifier, X_test, Y_test, method_name, data_for_prediction_array):
         print("-------------------------------------------------")
@@ -134,9 +138,11 @@ class HandPDShap():
 if __name__ == "__main__":
     handpdshap = HandPDShap()
 
-    is_need_to_create = False
+    is_need_to_create = True
 
+    # ACC: 0.897
     handpdshap.shap_svm(is_need_to_create_model=is_need_to_create, chosen_instance=5)
     handpdshap.shap_rfc(is_need_to_create_model=is_need_to_create, chosen_instance=5)
     handpdshap.shap_knn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
     handpdshap.shap_nn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    handpdshap.shap_ens(is_need_to_create_model=is_need_to_create, chosen_instance=5)
