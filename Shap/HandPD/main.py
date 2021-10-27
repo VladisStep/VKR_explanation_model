@@ -31,42 +31,22 @@ class HandPDShap():
         self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(*[X, Y], test_size=test_size,
                                                                                 random_state=0)
 
-    def shap(self, is_need_to_create_model, chosen_instance, create_foo, method_name, model_filename, explainer):
+    def shap(self, is_need_to_create_model, chosen_instance, create_foo, method_name, model_filename, explainer,
+             isKernelExplainer):
         if is_need_to_create_model:
             create_foo(model_filename, self.X_train, self.Y_train)
 
         model = load(model_filename)
-        expl = explainer(model.predict_proba, self.X_train.values)
+        if isKernelExplainer:
+            expl = explainer(model.predict_proba, self.X_train.values)
+        else:
+            expl = explainer(model)
 
         # which row from data should shap show?
         data_for_prediction = self.X_test.iloc[chosen_instance]
 
         self.print_acc(model, self.X_test, self.Y_test, method_name, data_for_prediction.values.reshape(1, -1))
         self.plot_graphs(expl, data_for_prediction, self.X_train, method_name)
-
-    def shap_svm(self, is_need_to_create_model, chosen_instance):
-        self.shap(is_need_to_create_model, chosen_instance, create_SVM, "SVM", self.SVM_model_filename,
-                  shap.KernelExplainer)
-
-    def shap_rfc(self, is_need_to_create_model, chosen_instance):
-        self.shap(is_need_to_create_model, chosen_instance, create_RFC, "RFC", self.RFC_model_filename,
-                  shap.TreeExplainer)
-
-    def shap_knn(self, is_need_to_create_model, chosen_instance):
-        self.shap(is_need_to_create_model, chosen_instance, create_KNN, "KNN", self.KNN_model_filename,
-                  shap.KernelExplainer)
-
-    def shap_nn(self, is_need_to_create_model, chosen_instance):
-        self.shap(is_need_to_create_model, chosen_instance, create_NN, "NN", self.NN_model_filename,
-                  shap.KernelExplainer)
-
-    def shap_ens(self, is_need_to_create_model, chosen_instance):
-        self.shap(is_need_to_create_model, chosen_instance, create_ENS, "ENS", self.ENS_model_filename,
-                  shap.KernelExplainer)
-
-    def shap_etc(self, is_need_to_create_model, chosen_instance):
-        self.shap(is_need_to_create_model, chosen_instance, create_ETC, "ETC", self.ETC_model_filename,
-                  shap.KernelExplainer)
 
     def print_acc(self, classifier, X_test, Y_test, method_name, data_for_prediction_array):
         preds = classifier.predict(X_test.values)
@@ -111,17 +91,17 @@ class HandPDShap():
 if __name__ == "__main__":
     handpdshap = HandPDShap()
 
-    is_need_to_create = True
-
-    # ACC: 0.897
-    handpdshap.shap_svm(is_need_to_create_model=is_need_to_create, chosen_instance=5)
-    # ACC: 0.94
-    handpdshap.shap_rfc(is_need_to_create_model=is_need_to_create, chosen_instance=5)
-    # ACC: 0.815
-    handpdshap.shap_knn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
-    # ACC: 0.902
-    handpdshap.shap_nn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
-    # ACC: 0.951
-    handpdshap.shap_ens(is_need_to_create_model=is_need_to_create, chosen_instance=5)
-    # ACC: 0.924
-    handpdshap.shap_etc(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # is_need_to_create = True
+    #
+    # # ACC: 0.897
+    # handpdshap.shap_svm(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # # ACC: 0.94
+    # handpdshap.shap_rfc(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # # ACC: 0.815
+    # handpdshap.shap_knn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # # ACC: 0.902
+    # handpdshap.shap_nn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # # ACC: 0.951
+    # handpdshap.shap_ens(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # # ACC: 0.924
+    # handpdshap.shap_etc(is_need_to_create_model=is_need_to_create, chosen_instance=5)

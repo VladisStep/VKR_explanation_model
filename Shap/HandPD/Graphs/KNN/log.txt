@@ -1,0 +1,12 @@
+KNN:
+Prediction: [[0. 1.]]
+              precision    recall  f1-score   support
+
+           0       0.50      0.15      0.23        34
+           1       0.83      0.97      0.90       150
+
+    accuracy                           0.82       184
+   macro avg       0.67      0.56      0.56       184
+weighted avg       0.77      0.82      0.77       184
+
+The accuracy of this model is :	0.8152173913043478

@@ -54,26 +54,6 @@ class ParkinsonVoiceShap:
         self.print_acc(model, self.X_test, self.Y_test, method_name, data_for_prediction.reshape(1, -1))
         self.plot_graphs(expl, data_for_prediction, self.X_train, method_name)
 
-    def shap_svm(self, is_need_to_create_model, chosen_instance):
-        self.shap(is_need_to_create_model, chosen_instance, create_SVM, "SVM", self.SVM_model_filename,
-                  shap.KernelExplainer, True)
-
-    def shap_rfc(self, is_need_to_create_model, chosen_instance):
-        self.shap(is_need_to_create_model, chosen_instance, create_RFC, "RFC", self.RFC_model_filename,
-                  shap.TreeExplainer, False)
-
-    def shap_knn(self, is_need_to_create_model, chosen_instance):
-        self.shap(is_need_to_create_model, chosen_instance, create_KNN, "KNN", self.KNN_model_filename,
-                  shap.KernelExplainer, True)
-
-    def shap_nn(self, is_need_to_create_model, chosen_instance):
-        self.shap(is_need_to_create_model, chosen_instance, create_NN, "NN", self.NN_model_filename,
-                  shap.KernelExplainer, True)
-
-    def shap_ens(self, is_need_to_create_model, chosen_instance):
-        self.shap(is_need_to_create_model, chosen_instance, create_ENS, "ENS", self.ENS_model_filename,
-                  shap.KernelExplainer, True)
-
     def print_acc(self, classifier, X_test, Y_test, method_name, data_for_prediction_array):
         preds = classifier.predict(X_test)
         s = method_name + ':\n' + 'Prediction: ' + str(classifier.predict_proba(data_for_prediction_array)) + '\n' + \
@@ -106,15 +86,15 @@ class ParkinsonVoiceShap:
 if __name__ == "__main__":
     parkinsonvoice = ParkinsonVoiceShap()
 
-    is_need_to_create = True
-
-    # ACC: 0.837
-    parkinsonvoice.shap_svm(is_need_to_create_model=is_need_to_create, chosen_instance=5)
-    # ACC: 0.898
-    parkinsonvoice.shap_rfc(is_need_to_create_model=is_need_to_create, chosen_instance=5)
-    # ACC: 0.857
-    parkinsonvoice.shap_knn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
-    # ACC: 0.867
-    parkinsonvoice.shap_nn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
-    # ACC: 0.826
-    parkinsonvoice.shap_ens(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # is_need_to_create = True
+    #
+    # # ACC: 0.837
+    # parkinsonvoice.shap_svm(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # # ACC: 0.898
+    # parkinsonvoice.shap_rfc(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # # ACC: 0.857
+    # parkinsonvoice.shap_knn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # # ACC: 0.867
+    # parkinsonvoice.shap_nn(is_need_to_create_model=is_need_to_create, chosen_instance=5)
+    # # ACC: 0.826
+    # parkinsonvoice.shap_ens(is_need_to_create_model=is_need_to_create, chosen_instance=5)

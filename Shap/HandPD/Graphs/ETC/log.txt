@@ -2,11 +2,11 @@ ETC:
 Prediction: [[0.05 0.95]]
               precision    recall  f1-score   support
 
-           0       0.92      0.65      0.76        34
-           1       0.93      0.99      0.95       150
+           0       0.96      0.65      0.77        34
+           1       0.93      0.99      0.96       150
 
-    accuracy                           0.92       184
-   macro avg       0.92      0.82      0.86       184
-weighted avg       0.92      0.92      0.92       184
+    accuracy                           0.93       184
+   macro avg       0.94      0.82      0.87       184
+weighted avg       0.93      0.93      0.92       184
 
-The accuracy of this model is :	0.9239130434782609
+The accuracy of this model is :	0.9293478260869565

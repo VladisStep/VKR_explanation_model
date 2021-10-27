@@ -1,5 +1,5 @@
 SVM:
-Prediction: [[0.20793118 0.79206882]]
+Prediction: [[0.20921099 0.79078901]]
               precision    recall  f1-score   support
 
            0       0.80      0.59      0.68        34
