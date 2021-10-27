@@ -4,7 +4,6 @@ from Shap.Parkinson_voice.main import ParkinsonVoiceShap
 
 path_to_project = my_utils.path_to_project
 
-
 if __name__ == "__main__":
     handpd = HandPDShap()
 

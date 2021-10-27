@@ -1,0 +1,12 @@
+NN:
+Prediction: [[0.08836106 0.91163894]]
+              precision    recall  f1-score   support
+
+           0       0.87      0.54      0.67        24
+           1       0.87      0.97      0.92        74
+
+    accuracy                           0.87        98
+   macro avg       0.87      0.76      0.79        98
+weighted avg       0.87      0.87      0.86        98
+
+The accuracy of this model is :	0.8673469387755102
