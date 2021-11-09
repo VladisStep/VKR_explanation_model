@@ -1,3 +1,5 @@
+import time
+
 import shap
 
 import my_utils
@@ -11,6 +13,12 @@ from Shap.HandPD.main import HandPDShap
 from Shap.Parkinson_voice.main import ParkinsonVoiceShap
 
 path_to_project = my_utils.path_to_project
+
+
+def print_time(time_start, time_end, filename):
+    f = open(filename, 'a')
+    f.write('\nTime spent, seconds: ' + str(time_end - time_start))
+    f.close()
 
 
 class MyShap:
@@ -49,12 +57,41 @@ class MyShap:
                               shap.TreeExplainer, False)
 
     def shap(self, is_need_to_create_model, chosen_instance):
+        time_start = time.time()
         self.shap_svm(is_need_to_create_model=is_need_to_create_model, chosen_instance=chosen_instance)
+        time_end = time.time()
+        print_time(time_start, time_end, self.path_to_project + 'Shap/' + self.dataset_obj.dataset_name
+                   + '/Graphs/SVM/log.txt')
+
+        time_start = time.time()
         self.shap_rfc(is_need_to_create_model=is_need_to_create_model, chosen_instance=chosen_instance)
+        time_end = time.time()
+        print_time(time_start, time_end, self.path_to_project + 'Shap/' + self.dataset_obj.dataset_name
+                   + '/Graphs/RFC/log.txt')
+
+        time_start = time.time()
         self.shap_knn(is_need_to_create_model=is_need_to_create_model, chosen_instance=chosen_instance)
+        time_end = time.time()
+        print_time(time_start, time_end, self.path_to_project + 'Shap/' + self.dataset_obj.dataset_name
+                   + '/Graphs/KNN/log.txt')
+
+        time_start = time.time()
         self.shap_nn(is_need_to_create_model=is_need_to_create_model, chosen_instance=chosen_instance)
+        time_end = time.time()
+        print_time(time_start, time_end, self.path_to_project + 'Shap/' + self.dataset_obj.dataset_name
+                   + '/Graphs/NN/log.txt')
+
+        time_start = time.time()
         self.shap_ens(is_need_to_create_model=is_need_to_create_model, chosen_instance=chosen_instance)
+        time_end = time.time()
+        print_time(time_start, time_end, self.path_to_project + 'Shap/' + self.dataset_obj.dataset_name
+                   + '/Graphs/ENS/log.txt')
+
+        time_start = time.time()
         self.shap_etc(is_need_to_create_model=is_need_to_create_model, chosen_instance=chosen_instance)
+        time_end = time.time()
+        print_time(time_start, time_end, self.path_to_project + 'Shap/' + self.dataset_obj.dataset_name
+                   + '/Graphs/ETC/log.txt')
 
 
 if __name__ == "__main__":

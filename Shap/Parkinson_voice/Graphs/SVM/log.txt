@@ -1,5 +1,5 @@
 SVM:
-Prediction: [[0.02420156 0.97579844]]
+Prediction: [[0.03270355 0.96729645]]
               precision    recall  f1-score   support
 
            0       0.75      0.50      0.60        24
@@ -10,3 +10,5 @@ Prediction: [[0.02420156 0.97579844]]
 weighted avg       0.83      0.84      0.82        98
 
 The accuracy of this model is :	0.8367346938775511
+Mean Squared Error: 0.16326530612244897
+Time spent, seconds: 11.004999160766602

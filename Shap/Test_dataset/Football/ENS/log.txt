@@ -1,0 +1,12 @@
+ENS:
+Prediction: [[0.3 0.7]]
+              precision    recall  f1-score   support
+
+       False       0.53      0.53      0.53        15
+        True       0.59      0.59      0.59        17
+
+    accuracy                           0.56        32
+   macro avg       0.56      0.56      0.56        32
+weighted avg       0.56      0.56      0.56        32
+
+The accuracy of this model is :	0.5625

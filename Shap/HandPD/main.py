@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import shap
 from joblib import load
 from sklearn import metrics
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, mean_squared_error
 from sklearn.model_selection import train_test_split
 
 import my_utils
@@ -52,7 +52,8 @@ class HandPDShap():
         preds = classifier.predict(X_test.values)
         s = method_name + ':\n' + 'Prediction: ' + str(classifier.predict_proba(data_for_prediction_array)) + '\n' + \
             str(classification_report(Y_test, preds)) + '\n' + 'The accuracy of this model is :\t' \
-            + str(metrics.accuracy_score(preds, Y_test))
+            + str(metrics.accuracy_score(preds, Y_test)) + '\nMean Squared Error: ' \
+            + str(mean_squared_error(Y_test, preds))
 
         f = open(self.path_to_project + 'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/log.txt', 'w')
         f.write(s)

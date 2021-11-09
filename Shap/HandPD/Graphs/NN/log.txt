@@ -10,3 +10,5 @@ Prediction: [[0.0804163 0.9195837]]
 weighted avg       0.90      0.90      0.90       184
 
 The accuracy of this model is :	0.9021739130434783
+Mean Squared Error: 0.09782608695652174
+Time spent, seconds: 191.06229615211487
