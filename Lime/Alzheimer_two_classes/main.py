@@ -1,8 +1,9 @@
 import AnchorExplainer
 import LimeExplainer
+import my_utils
 
-anchor_explainer = AnchorExplainer.AnchorExplainer('/Users/vladis_step/VKR_explanation_model/Models/my_alzheimer_model.h5', 176, 208)
-lime_explainer = LimeExplainer.LimeExplainer('/Users/vladis_step/VKR_explanation_model/Models/my_alzheimer_model.h5', 176, 208)
+anchor_explainer = AnchorExplainer.AnchorExplainer(my_utils.path_to_project + 'Models/my_alzheimer_model.h5', 176, 208)
+lime_explainer = LimeExplainer.LimeExplainer(my_utils.path_to_project + 'Models/my_alzheimer_model.h5', 176, 208)
 
 img_path = [
     # "Datasets/Alzheimer_two_classes/test/Demented/27 (9).jpg",
