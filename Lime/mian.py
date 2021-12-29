@@ -1,7 +1,10 @@
+import numpy as np
 from tensorflow.keras.preprocessing import image
 from keras.preprocessing.image import load_img
 import my_utils
 from tensorflow import keras
+import os
+
 
 from Lime import MyAnchorExplainer, MyIntegratedGradient, MyLimeExplainer
 
@@ -51,20 +54,75 @@ images = [
 #                             image_name='test')
 
 
+def processImgToModel(image_path):
+    return  image.img_to_array(load_img(path=image_path, target_size=(IMAGE_SHAPE, IMAGE_SHAPE))).astype("double") / 255.0
+
+def getMinMax():
+    minPath = []
+    maxPath = []
+    EXAMPLE_COUNT = 3
+
+    for dirname, _, filenames in os.walk(VALID_DIR):
+        for filename in filenames:
+            # print(os.path.join(dirname, filename))
+            current_path = os.path.join(dirname, filename)
+            pred = model.predict(
+                np.expand_dims(processImgToModel(current_path), axis=0))
+            current_value = abs(pred[0][0] - pred[0][1])
+
+            if current_value < 0.1 and len(minPath) < EXAMPLE_COUNT:
+                minPath.append(current_path)
+                print("min: " + current_path)
+            elif 0.95 > current_value > 0.9 and len(maxPath) < EXAMPLE_COUNT:
+                maxPath.append(current_path)
+                print("max: " + current_path)
+            elif len(maxPath) >= EXAMPLE_COUNT and len(minPath) >= EXAMPLE_COUNT:
+                break
+
+    return minPath, maxPath
 
 
-for i in images:
+def getExplanations(pathList, name):
+    for i in range(len(pathList)):
 
-    print(VALID_DIR + i[1])
-    loaded_img = image.img_to_array(load_img(path=VALID_DIR + i[1], target_size=(IMAGE_SHAPE, IMAGE_SHAPE)))\
-                     .astype("double") / 255.0
+        loaded_img = processImgToModel(pathList[i])
 
-    # MyLimeExplainer.explanation(model, loaded_img, num_samples=500,
-    #                             image_name=i[0],
-    #                             path_to_save=PATH_TO_SAVE_GRAPHS)
-    MyAnchorExplainer.explanation(model, loaded_img,
-                                image_name=i[0],
-                                path_to_save=PATH_TO_SAVE_GRAPHS)
-    # MyIntegratedGradient.explanation(model, loaded_img,
-    #                               image_name=i[0],
-    #                               path_to_save=PATH_TO_SAVE_GRAPHS)
+        # MyLimeExplainer.explanation(model, loaded_img, num_samples=500,
+        #                             image_name=name + str(i),
+        #                             path_to_save=PATH_TO_SAVE_GRAPHS)
+        MyAnchorExplainer.explanation(model, loaded_img,
+                                    image_name=name + str(i),
+                                    path_to_save=PATH_TO_SAVE_GRAPHS)
+        MyAnchorExplainer.explanation(model, loaded_img,
+                                      threshold=0.8,
+                                      image_name=name + str(i),
+                                      path_to_save=PATH_TO_SAVE_GRAPHS)
+        MyAnchorExplainer.explanation(model, loaded_img,
+                                      threshold=0.7,
+                                      image_name=name + str(i),
+                                      path_to_save=PATH_TO_SAVE_GRAPHS)
+        # MyIntegratedGradient.explanation(model, loaded_img,
+        #                               image_name=name + str(i),
+        #                               path_to_save=PATH_TO_SAVE_GRAPHS)
+
+
+def anchorTest(pathList, name):
+    PATH_TO_ANCHOR_TESTS = my_utils.path_to_project + "Lime/Cats_vs_dogs/AnchorTests/"
+    for i in range(len(pathList)):
+        loaded_img = processImgToModel(pathList[i])
+        MyAnchorExplainer.explanation(model, loaded_img,
+                                      image_name=name + str(i),
+                                      path_to_save=PATH_TO_ANCHOR_TESTS)
+
+
+
+
+
+for im in images:
+    getExplanations([VALID_DIR + im[1]],  im[0])
+# minPath, maxPath = getMinMax()
+# anchorTest(minPath, "min_")
+# anchorTest(maxPath, "max_")
+
+# getExplanations(minPath, "min_")
+# getExplanations(maxPath, "max_")

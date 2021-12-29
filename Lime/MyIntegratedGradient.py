@@ -4,7 +4,8 @@ import numpy as np
 from alibi.utils.visualization import visualize_image_attr
 
 
-def explanation(model, image, image_name=None, path_to_save=None):
+def explanation(model, image, image_name=None, path_to_save=None,
+                pred_name='--'):
     predictions = model(np.expand_dims(image, axis=0)).numpy().argmax(axis=1)
 
     ig = IntegratedGradients(model,
@@ -28,7 +29,7 @@ def explanation(model, image, image_name=None, path_to_save=None):
                          sign='all', show_colorbar=True, title='Overlaid Attributions',
                          plt_fig_axis=(fig, ax[0]), use_pyplot=True)
 
-    fig.suptitle("Integrated gradient explainer")
+    fig.suptitle("Integrated gradient explainer" + "\nClass: " + pred_name)
 
     if path_to_save:
         fig.savefig(path_to_save +

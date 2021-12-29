@@ -6,8 +6,8 @@ from matplotlib import pyplot as plt
 from skimage.segmentation import mark_boundaries
 
 
-def explanation(model, image, num_samples=100, image_name=None, path_to_save=None):
-    model_prediction = model.predict(np.expand_dims(image, axis=0))
+def explanation(model, image, num_samples=100, image_name=None, path_to_save=None, pred_name='--'):
+    # model_prediction = model.predict(np.expand_dims(image, axis=0))
 
     np.random.seed(0)
 
@@ -33,7 +33,7 @@ def explanation(model, image, num_samples=100, image_name=None, path_to_save=Non
 
     ax[0].axis("off")
     ax[0].imshow(mark_boundaries(temp / 2 + 0.5, mask))
-    ax[0].set_title("explanation")
+    # ax[0].set_title("explanation " + str(model_prediction[0]))
 
 
     # Heatmap
@@ -44,7 +44,7 @@ def explanation(model, image, num_samples=100, image_name=None, path_to_save=Non
     fig.colorbar(ax1, ax=ax[1])
     ax[1].set_title("Heatmap")
 
-    fig.suptitle("Lime explainer")
+    fig.suptitle("Lime explainer" + "\nClass: " + pred_name)
     if path_to_save :
         plt.savefig(path_to_save + image_name + '_lime_' + str(num_samples) + '.png')
     plt.show()

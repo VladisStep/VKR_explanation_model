@@ -7,6 +7,8 @@ import tensorflow as tf
 # from kaggle_datasets import KaggleDatasets
 import matplotlib.pyplot as plt
 import PIL
+from tensorflow.keras.layers.experimental.preprocessing import Rescaling
+
 
 import my_utils
 
@@ -17,8 +19,9 @@ path_to_project = my_utils.path_to_project
 
 def data_transformation(train_ds, val_ds, test_ds):
     def one_hot_label(image, label):
+        rescale = Rescaling(scale=1.0 / 255)
         label = tf.one_hot(label, NUM_CLASSES)
-        return image, label
+        return rescale(image), label
 
     train_ds = train_ds.map(one_hot_label, num_parallel_calls=AUTOTUNE)
     val_ds = val_ds.map(one_hot_label, num_parallel_calls=AUTOTUNE)
