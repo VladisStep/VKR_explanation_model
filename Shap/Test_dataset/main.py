@@ -1,14 +1,16 @@
 import time
 import warnings
 
-import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 import shap
 import sklearn.exceptions
 from joblib import load
 from sklearn import metrics
+from sklearn.datasets import load_iris
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
+import sklearn.datasets as datasets
 
 import my_utils
 from Shap.HandPD.Models.ENS_model import create_ENS
@@ -18,6 +20,7 @@ from Shap.HandPD.Models.NN_model import create_NN
 from Shap.HandPD.Models.RFC_model import create_RFC
 from Shap.HandPD.Models.SVM_model import create_SVM
 from Shap.Test_dataset.data_football import load_fifa2018_stat
+from Shap.Test_dataset.data_heart_failure import load_heart_failure
 
 warnings.filterwarnings("ignore", category=sklearn.exceptions.UndefinedMetricWarning)
 
@@ -27,18 +30,29 @@ path_to_project = my_utils.path_to_project
 class TestDatasetShap:
     def __init__(self):
         self.path_to_project = my_utils.path_to_project
-        # self.RFC_model_filename = self.path_to_project + 'Models/RFC.joblib'
-        # self.SVM_model_filename = self.path_to_project + 'Models/SVM.joblib'
-        # self.KNN_model_filename = self.path_to_project + 'Models/KNN.joblib'
-        # self.NN_model_filename = self.path_to_project + 'Models/NN.joblib'
-        # self.ENS_model_filename = self.path_to_project + 'Models/ENS.joblib'
         self.dataset_name = 'Test_dataset'
 
-        self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(*shap.datasets.iris(), test_size=0.2,
-                                                                                random_state=0)
-        self.feature_names = self.X_test.columns.values
+        # WINE DATASET
+        # dataset = datasets.load_wine()
+        # X = dataset['data']
+        # Y = dataset['target']
+        # self.feature_names = dataset['feature_names']
+        # self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(X, Y, random_state=0)
+
+        # IRIS DATASET
+        # self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(*shap.datasets.iris(), test_size=0.2,
+        #                                                                         random_state=0)
+        # self.feature_names = self.X_test.columns.values
+        # self.target_names = load_iris().target_names
+
+        # FOOTBALL DATASET
         # X, Y, self.feature_names = load_fifa2018_stat()
         # self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(X, Y, random_state=0)
+
+        # HEART FAILURE
+        X, Y, self.feature_names = load_heart_failure()
+        self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(X, Y, random_state=0)
+        self.target_names = [0, 1]
 
     def shap(self, is_need_to_create_model, chosen_instance, create_foo, method_name, model_filename, explainer,
              isKernelExplainer):
@@ -55,6 +69,8 @@ class TestDatasetShap:
 
         # which row from data should shap show?
         data_for_prediction = self.X_test.values[chosen_instance]
+        # data_for_prediction = self.X_test[chosen_instance]
+        # print("Real: ", self.Y_test[chosen_instance])
 
         self.print_acc(model, self.X_test, self.Y_test, method_name, data_for_prediction.reshape(1, -1))
         self.plot_graphs(expl, data_for_prediction, self.X_train, method_name)
@@ -72,20 +88,42 @@ class TestDatasetShap:
 
     def plot_graphs(self, explainer, data_for_prediction, X, method_name):
         shap_values = explainer.shap_values(data_for_prediction)
+        # print("Shap_values: ", shap_values)
+        # print(explainer(X).compute_time)
         shap_display = shap.force_plot(explainer.expected_value[0], shap_values[0], data_for_prediction,
                                        feature_names=self.feature_names)
         shap.save_html(path_to_project + 'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/force_plot.html',
                        shap_display)
 
-        shap.plots._waterfall.waterfall_legacy(explainer.expected_value[0], shap_values[0], data_for_prediction,
-                                               show=False,
-                                               feature_names=self.feature_names)
-        plt.savefig(path_to_project + 'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/waterfall.png')
+        shap_values = explainer.shap_values(X)
+        # FOR EACH CLASS
+        # shap.summary_plot(shap_values[1], X, show=False, feature_names=self.feature_names, plot_size=[15, 7])
+        # FOR ALL CLASSES
+        shap.summary_plot(shap_values, X, show=False, feature_names=self.feature_names, plot_size=[15, 7])
+        plt.savefig(path_to_project + 'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/summary.png')
         plt.clf()
 
-        shap_values = explainer.shap_values(X)
-        shap.summary_plot(shap_values, X, show=False, feature_names=self.feature_names)
-        plt.savefig(path_to_project + 'Shap/' + self.dataset_name + '/Graphs/' + method_name + '/summary.png')
+        # IRIS:
+        fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 7))
+        feature_ind = 0
+
+        for j in range(axes.shape[0]):
+            for k in range(axes.shape[1]):
+                for i in range(len(shap_values)):
+                    x_ax = X.values[:, feature_ind]
+                    y_ax = shap_values[i][:, feature_ind]
+                    if j == 0 and k == 0:
+                        axes[j, k].plot(x_ax, y_ax, label=self.target_names[i], linestyle='dashdot')
+                    else:
+                        axes[j, k].plot(x_ax, y_ax, linestyle='dashdot')
+
+                axes[j, k].set_ylabel('SHAP')
+                axes[j, k].set_xlabel(self.feature_names[feature_ind])
+                axes[j, k].legend()
+                feature_ind = feature_ind + 1
+
+        fig.suptitle("SHAP explainer")
+        plt.savefig(path_to_project + 'Shap/' + self.dataset_name + '/Graphs/shap_test.png')
         plt.clf()
 
 

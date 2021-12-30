@@ -11,22 +11,7 @@ path_to_project = my_utils.path_to_project
 
 
 def create_NN(filename, X_train, Y_train):
-    # model = keras.models.Sequential([
-    #     keras.layers.GRU(128, return_sequences=True, input_shape=(X_train.shape[1], X_train.shape[0])),
-    #     keras.layers.GRU(128),
-    #     keras.layers.Dense(1, activation="sigmoid")
-    # ])
-    #
-    # model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
-    # model_checkpoint_callback = keras.callbacks.ModelCheckpoint(
-    #     filepath=filename,
-    #     save_weights_only=True,
-    #     monitor='val_accuracy',
-    #     mode='max',
-    #     save_best_only=True)
-    #
-    # model.fit(X_train, Y_train, epochs=30, batch_size=32, validation_data=(X_test, Y_test),
-    #           callbacks=[model_checkpoint_callback])
+
     model = make_pipeline(
         StandardScaler(),
         MLPClassifier(hidden_layer_sizes=(5,), activation='logistic', max_iter=10000, learning_rate='invscaling',

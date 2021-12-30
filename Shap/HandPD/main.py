@@ -6,12 +6,6 @@ from sklearn.metrics import classification_report, mean_squared_error
 from sklearn.model_selection import train_test_split
 
 import my_utils
-from Shap.HandPD.Models.ENS_model import create_ENS
-from Shap.HandPD.Models.ETC_model import create_ETC
-from Shap.HandPD.Models.KNN_model import create_KNN
-from Shap.HandPD.Models.NN_model import create_NN
-from Shap.HandPD.Models.RFC_model import create_RFC
-from Shap.HandPD.Models.SVM_model import create_SVM
 from Shap.HandPD.data import load_hand_pd
 
 
