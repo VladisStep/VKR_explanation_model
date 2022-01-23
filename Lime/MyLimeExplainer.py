@@ -7,7 +7,7 @@ from skimage.segmentation import mark_boundaries
 
 
 def explanation(model, image, num_samples=100, image_name=None, path_to_save=None, pred_name='--'):
-    # model_prediction = model.predict(np.expand_dims(image, axis=0))
+    model_prediction = model.predict(np.expand_dims(image, axis=0))
 
     np.random.seed(0)
 
