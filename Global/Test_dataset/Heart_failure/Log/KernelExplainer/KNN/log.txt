@@ -1,0 +1,15 @@
+KernelExplainer; KNN:
+Prediction: [[0.8 0.2]]
+              precision    recall  f1-score   support
+
+           0       0.68      1.00      0.81        48
+           1       1.00      0.15      0.26        27
+
+    accuracy                           0.69        75
+   macro avg       0.84      0.57      0.53        75
+weighted avg       0.79      0.69      0.61        75
+
+The accuracy of this model is :	0.6933333333333334
+Mean Squared Error: 0.30666666666666664
+Time spent training the model, seconds: 0.0019655227661132812
+Time spent training the model and explaining the result, seconds: 589.4357969760895
