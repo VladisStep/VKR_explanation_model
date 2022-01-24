@@ -1,0 +1,15 @@
+KernelExplainer; SVM:
+Prediction: [[0.2101679 0.7898321]]
+              precision    recall  f1-score   support
+
+           0       0.80      0.59      0.68        34
+           1       0.91      0.97      0.94       150
+
+    accuracy                           0.90       184
+   macro avg       0.86      0.78      0.81       184
+weighted avg       0.89      0.90      0.89       184
+
+The accuracy of this model is :	0.8967391304347826
+Mean Squared Error: 0.10326086956521739
+Time spent training the model, seconds: 42.753668785095215
+Time spent training the model and explaining the result, seconds: 312.792192697525

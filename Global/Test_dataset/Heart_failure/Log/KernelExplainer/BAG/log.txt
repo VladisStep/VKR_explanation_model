@@ -1,0 +1,15 @@
+KernelExplainer; BAG:
+Prediction: [[1. 0.]]
+              precision    recall  f1-score   support
+
+           0       0.88      0.92      0.90        48
+           1       0.84      0.78      0.81        27
+
+    accuracy                           0.87        75
+   macro avg       0.86      0.85      0.85        75
+weighted avg       0.87      0.87      0.87        75
+
+The accuracy of this model is :	0.8666666666666667
+Mean Squared Error: 0.13333333333333333
+Time spent training the model, seconds: 0.020028114318847656
+Time spent training the model and explaining the result, seconds: 506.11261558532715

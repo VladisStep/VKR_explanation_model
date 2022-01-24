@@ -1,0 +1,18 @@
+----
+ALE with model compute time:
+0.13299942016601562
+----
+ALE without model compute time:
+0.0
+----
+Kernel explainer with model compute time:
+6.734528541564941
+----
+Kernel explainer without model compute time:
+6.439702033996582
+----
+Tree explainer with model compute time:
+0.14699721336364746
+----
+Tree explainer without model compute time:
+0.017000436782836914
