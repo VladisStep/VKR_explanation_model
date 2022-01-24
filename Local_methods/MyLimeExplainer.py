@@ -44,7 +44,7 @@ def explanation(model, image, num_samples=100, image_name=None, path_to_save=Non
     fig.colorbar(ax1, ax=ax[1])
     ax[1].set_title("Heatmap")
 
-    fig.suptitle("Lime explainer" + "\nClass: " + pred_name)
+    fig.suptitle("Local_methods explainer" + "\nClass: " + pred_name)
     if path_to_save :
         plt.savefig(path_to_save + image_name + '_lime_' + str(num_samples) + '.png')
     plt.show()
