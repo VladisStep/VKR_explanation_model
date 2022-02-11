@@ -1,6 +1,7 @@
 import time
 
 import matplotlib.pyplot as plt
+import numpy as np
 import shap
 from joblib import load
 from sklearn.model_selection import train_test_split
@@ -57,6 +58,31 @@ class HandPDShap:
         shap.dependence_plot('GENDER', shap_values[1], self.X_train, interaction_index='AGE', show=False)
         plt.title(method_name + "; " + model_name)
         plt.savefig(my_utils.PATH_TO_HANDPD_LOG + method_name + '/' + model_name + '/dependence.png')
+        plt.clf()
+
+        fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(16, 12))
+        feature_ind = 0
+
+        for j in range(axes.shape[0]):
+            for k in range(axes.shape[1]):
+                for i in range(len(shap_values)):
+                    x_ax = X.values[:, feature_ind]
+                    y_ax = shap_values[i][:, feature_ind]
+                    d = 2
+                    theta = np.polyfit(x_ax, y_ax, deg=d)
+                    model = np.poly1d(theta)
+                    if j == 0 and k == 0:
+                        axes[j, k].plot(x_ax, model(x_ax), label=list(self.target_names)[i], linestyle='dashdot')
+                    else:
+                        axes[j, k].plot(x_ax, model(x_ax), linestyle='dashdot')
+
+                axes[j, k].set_ylabel('SHAP')
+                axes[j, k].set_xlabel(self.feature_names[feature_ind])
+                axes[j, k].legend()
+                feature_ind = feature_ind + 1
+
+        fig.suptitle(method_name + '; ' + model_name)
+        plt.savefig(my_utils.PATH_TO_HANDPD_LOG + method_name + '/' + model_name + '/as_ALE.png')
         plt.clf()
 
         # shap.plots.heatmap(shap_values[0], show=False)

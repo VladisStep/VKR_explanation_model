@@ -1,3 +1,4 @@
+import numpy
 import shap
 import shap.benchmark
 import shap.maskers
@@ -10,7 +11,6 @@ from sklearn.model_selection import train_test_split
 
 import my_utils
 from Global.Models.ETC_model import create_ETC
-
 
 
 def score_map(true, pred):
@@ -86,7 +86,33 @@ def bench(is_need_to_create, model_filename):
         )
 
     ale = ALE(model.predict_proba, feature_names=feature_names, target_names=target_names)
-    ale_values = ale.explain(X_eval, min_bin_points=X_eval.shape[0])
+    exp = ale.explain(X_train)
+    ale_values = exp.ale_values
+    # ale_values = ale.explain(X_eval, min_bin_points=X_eval.shape[0])
+
+    new_ale_values = []
+    for i in range(target_names.size):
+        tmp = []
+        for j in range(len(ale_values)):
+            tmp2 = []
+            for k in range(ale_values[j].shape[0]):
+                tmp3 = []
+                for l in range(ale_values[j].shape[1]):
+                    tmp3.append((ale_values[j])[k][l])
+                tmp2.append(np.array(tmp3))
+            tmp.append(np.array(tmp2))
+        new_ale_values.append(tmp)
+
+    new_ale_values = np.array(new_ale_values)
+    smasker = shap.benchmark.ExplanationError(masker, model.predict, new_ale_values[0])
+    explanation_error_arr.append(smasker(new_ale_values[0], name='ALE'))
+    local_accuracy_arr.append(
+        shap.benchmark.BenchmarkResult(
+            "local accuracy", 'ALE', value=local_accuracy(X_train, X_test, new_ale_values[0], score_map, model)
+        )
+    )
+
+    # TODO: metric for ALE
 
     """   This benchmark metric measures the discrepancy between the output of the model predicted by an
        attribution explanation vs. the actual output of the model.  """

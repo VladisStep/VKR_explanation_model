@@ -1,2 +1,2 @@
 
-Time spent training the model and explaining the result, seconds: 3.407001256942749
+Time spent training the model and explaining the result, seconds: 1.7359991073608398

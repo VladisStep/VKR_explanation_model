@@ -9,6 +9,8 @@ from Global.Models.NN_model import create_NN
 from Global.Models.RFC_model import create_RFC
 from Global.Models.SVM_model import create_SVM
 from Global.Parkinson_voice.ALE_method import ParkinsonALE
+from Global.Test_dataset.ALE_method import TestALE
+from Global.Test_dataset.main import TestDatasetShap
 
 
 def print_time(time_start, time_end, filename):
@@ -84,4 +86,28 @@ if __name__ == "__main__":
     # -------------- PARKINSON VOICE --------------
     parkinson_voice = ParkinsonALE()
     myale = MyALE(parkinson_voice)
+    myale.ale(is_need_to_create)
+
+    # -------------- IRIS --------------
+    test_dataset = TestALE()
+    test_dataset.iris()
+    myale = MyALE(test_dataset)
+    myale.ale(is_need_to_create)
+
+    # -------------- WINE --------------
+    test_dataset = TestALE()
+    test_dataset.wine()
+    myale = MyALE(test_dataset)
+    myale.ale(is_need_to_create)
+
+    # -------------- FOOTBALL --------------
+    test_dataset = TestALE()
+    test_dataset.football()
+    myale = MyALE(test_dataset)
+    myale.ale(is_need_to_create)
+
+    # -------------- HEART FAILURE --------------
+    test_dataset = TestALE()
+    test_dataset.heart_failure()
+    myale = MyALE(test_dataset)
     myale.ale(is_need_to_create)

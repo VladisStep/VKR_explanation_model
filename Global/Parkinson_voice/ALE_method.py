@@ -26,7 +26,7 @@ class ParkinsonALE:
         ale = ALE(model.predict_proba, feature_names=self.feature_names, target_names=list(self.target_names))
         exp = ale.explain(self.X_train)
 
-        fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(16, 10))
+        fig, ax = plt.subplots(nrows=4, ncols=2, figsize=(16, 10))
 
         ax = plot_ale(exp, n_cols=2, fig_kw={'figwidth': 16, 'figheight': 10}, sharey=None)
 

@@ -2,6 +2,7 @@ import math
 import time
 import warnings
 
+import numpy as np
 import pandas as pd
 import shap
 import sklearn.exceptions
@@ -29,6 +30,10 @@ class TestDatasetShap:
         self.feature_names = self.X_test.columns.values
         self.target_names = load_iris().target_names
         self.path_to_log = my_utils.PATH_TO_IRIS
+        self.nrows = 2
+        self.ncols = 2
+        self.figwidth = 10
+        self.figheight = 7
 
     def wine(self):
         self.dataset_name = self.dataset_name + '/Wine'
@@ -36,21 +41,35 @@ class TestDatasetShap:
         X = dataset['data']
         Y = dataset['target']
         self.feature_names = dataset['feature_names']
+        self.target_names = list(set(Y))
         self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(X, Y, random_state=0)
         self.path_to_log = my_utils.PATH_TO_WINE
+        self.nrows = 5
+        self.ncols = 3
+        self.figwidth = 18
+        self.figheight = 14
 
     def football(self):
         self.dataset_name = self.dataset_name + '/Football'
         X, Y, self.feature_names = load_fifa2018_stat()
+        self.target_names = list(set(Y))
         self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(X, Y, random_state=0)
         self.path_to_log = my_utils.PATH_TO_FOOTBALL
+        self.nrows = 6
+        self.ncols = 3
+        self.figwidth = 18
+        self.figheight = 14
 
     def heart_failure(self):
         self.dataset_name = self.dataset_name + '/Heart_failure'
         X, Y, self.feature_names = load_heart_failure()
         self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(X, Y, random_state=0)
-        self.target_names = [0, 1]
+        self.target_names = list(set(Y))
         self.path_to_log = my_utils.PATH_TO_HEART_FAILURE
+        self.nrows = 4
+        self.ncols = 3
+        self.figwidth = 16
+        self.figheight = 12
 
     def shap(self, is_need_to_create_model, chosen_instance, create_foo, model_name, model_filename, explainer,
              isKernelExplainer):
@@ -96,33 +115,33 @@ class TestDatasetShap:
         plt.savefig(self.path_to_log + method_name + '/' + model_name + '/summary.png')
         plt.clf()
 
-        # IRIS:
-        # if self.feature_names % 2 == 0:
-        #     half = self.feature_names // 2
-        #     fig, axes = plt.subplots(nrows=half, ncols=2, figsize=(10, 7))
-        # else:
-        #     half = math.ceil(self.feature_names / 2)
-        #     fig, axes = plt.subplots(nrows=half, ncols=2, figsize=(10, 7))
-        # feature_ind = 0
-        #
-        # for j in range(axes.shape[0]):
-        #     for k in range(axes.shape[1]):
-        #         for i in range(len(shap_values)):
-        #             if isinstance(self.X_test, pd.DataFrame):
-        #                 x_ax = X.values[:, feature_ind]
-        #             else:
-        #                 x_ax = X.values[:, feature_ind]
-        #             y_ax = shap_values[i][:, feature_ind]
-        #             if j == 0 and k == 0:
-        #                 axes[j, k].plot(x_ax, y_ax, label=self.target_names[i], linestyle='dashdot')
-        #             else:
-        #                 axes[j, k].plot(x_ax, y_ax, linestyle='dashdot')
-        #
-        #         axes[j, k].set_ylabel('SHAP')
-        #         axes[j, k].set_xlabel(self.feature_names[feature_ind])
-        #         axes[j, k].legend()
-        #         feature_ind = feature_ind + 1
-        #
-        # fig.suptitle(method_name + '; ' + model_name)
-        # plt.savefig(self.path_to_log + method_name + '/' + model_name + '/as_ALE.png')
-        # plt.clf()
+        fig, axes = plt.subplots(nrows=self.nrows, ncols=self.ncols, figsize=(self.figwidth, self.figheight))
+        feature_ind = 0
+
+        for j in range(axes.shape[0]):
+            for k in range(axes.shape[1]):
+                if feature_ind > len(self.feature_names) - 1:
+                    break
+
+                for i in range(len(shap_values)):
+                    if isinstance(self.X_test, pd.DataFrame):
+                        x_ax = X.values[:, feature_ind]
+                    else:
+                        x_ax = X[:, feature_ind]
+                    y_ax = shap_values[i][:, feature_ind]
+                    d = 2
+                    theta = np.polyfit(x_ax, y_ax, deg=d)
+                    model = np.poly1d(theta)
+                    if j == 0 and k == 0:
+                        axes[j, k].plot(x_ax, model(x_ax), label=self.target_names[i], linestyle='dashdot')
+                    else:
+                        axes[j, k].plot(x_ax, model(x_ax), linestyle='dashdot')
+
+                axes[j, k].set_ylabel('SHAP')
+                axes[j, k].set_xlabel(self.feature_names[feature_ind])
+                axes[j, k].legend()
+                feature_ind = feature_ind + 1
+
+        fig.suptitle(method_name + '; ' + model_name)
+        plt.savefig(self.path_to_log + method_name + '/' + model_name + '/as_ALE.png')
+        plt.clf()

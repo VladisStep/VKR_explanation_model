@@ -1,15 +1,15 @@
 KernelExplainer; ETC:
-Prediction: [[0.89 0.11]]
+Prediction: [[0.91 0.09]]
               precision    recall  f1-score   support
 
-           0       0.81      0.96      0.88        48
-           1       0.89      0.59      0.71        27
+           0       0.78      0.94      0.85        48
+           1       0.82      0.52      0.64        27
 
-    accuracy                           0.83        75
-   macro avg       0.85      0.78      0.79        75
-weighted avg       0.84      0.83      0.82        75
+    accuracy                           0.79        75
+   macro avg       0.80      0.73      0.74        75
+weighted avg       0.79      0.79      0.77        75
 
-The accuracy of this model is :	0.8266666666666667
-Mean Squared Error: 0.17333333333333334
-Time spent training the model, seconds: 0.10199999809265137
-Time spent training the model and explaining the result, seconds: 1028.19775557518
+The accuracy of this model is :	0.7866666666666666
+Mean Squared Error: 0.21333333333333335
+Time spent training the model, seconds: 0.11897087097167969
+Time spent training the model and explaining the result, seconds: 1081.3344831466675

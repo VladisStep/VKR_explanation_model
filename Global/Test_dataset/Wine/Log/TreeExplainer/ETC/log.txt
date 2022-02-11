@@ -1,16 +1,16 @@
 TreeExplainer; ETC:
-Prediction: [[0.5  0.45 0.05]]
+Prediction: [[0.4  0.56 0.04]]
               precision    recall  f1-score   support
 
-           0       0.89      1.00      0.94        16
-           1       1.00      0.90      0.95        21
-           2       1.00      1.00      1.00         8
+           0       1.00      1.00      1.00        16
+           1       1.00      0.95      0.98        21
+           2       0.89      1.00      0.94         8
 
-    accuracy                           0.96        45
-   macro avg       0.96      0.97      0.96        45
-weighted avg       0.96      0.96      0.96        45
+    accuracy                           0.98        45
+   macro avg       0.96      0.98      0.97        45
+weighted avg       0.98      0.98      0.98        45
 
-The accuracy of this model is :	0.9555555555555556
-Mean Squared Error: 0.044444444444444446
-Time spent training the model, seconds: 0.09100055694580078
-Time spent training the model and explaining the result, seconds: 0.3840000629425049
+The accuracy of this model is :	0.9777777777777777
+Mean Squared Error: 0.022222222222222223
+Time spent training the model, seconds: 0.10399961471557617
+Time spent training the model and explaining the result, seconds: 1.9059998989105225

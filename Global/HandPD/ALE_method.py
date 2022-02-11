@@ -28,9 +28,9 @@ class HandPdALE:
         ale = ALE(model.predict_proba, feature_names=self.feature_names, target_names=list(self.target_names))
         exp = ale.explain(self.X_train.values)
 
-        fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(16, 10))
+        fig, ax = plt.subplots(nrows=4, ncols=3, figsize=(16, 10))
 
-        ax = plot_ale(exp, n_cols=2, fig_kw={'figwidth': 16, 'figheight': 10}, sharey=None)
+        ax = plot_ale(exp, n_cols=3, fig_kw={'figwidth': 16, 'figheight': 10}, sharey=None)
 
         fig.suptitle(self.method_name + '; ' + model_name)
         plt.savefig(my_utils.PATH_TO_HANDPD_LOG + self.method_name + '/' + model_name + '/plot_ale.png')

@@ -2,6 +2,7 @@ import time
 import warnings
 
 import matplotlib.pyplot as plt
+import numpy as np
 import shap
 import sklearn.exceptions
 from joblib import load
@@ -58,6 +59,31 @@ class ParkinsonVoiceShap:
         shap.summary_plot(shap_values, X, show=False, feature_names=self.feature_names, plot_size=[15, 7])
         plt.title(method_name + "; " + model_name)
         plt.savefig(my_utils.PATH_TO_PARKINSON_LOG + method_name + '/' + model_name + '/summary.png')
+        plt.clf()
+
+        fig, axes = plt.subplots(nrows=4, ncols=2, figsize=(16, 12))
+        feature_ind = 0
+
+        for j in range(axes.shape[0]):
+            for k in range(axes.shape[1]):
+                for i in range(len(shap_values)):
+                    x_ax = X[:, feature_ind]
+                    y_ax = shap_values[i][:, feature_ind]
+                    d = 2
+                    theta = np.polyfit(x_ax, y_ax, deg=d)
+                    model = np.poly1d(theta)
+                    if j == 0 and k == 0:
+                        axes[j, k].plot(x_ax, model(x_ax), label=list(self.target_names)[i], linestyle='dashdot')
+                    else:
+                        axes[j, k].plot(x_ax, model(x_ax), linestyle='dashdot')
+
+                axes[j, k].set_ylabel('SHAP')
+                axes[j, k].set_xlabel(self.feature_names[feature_ind])
+                axes[j, k].legend()
+                feature_ind = feature_ind + 1
+
+        fig.suptitle(method_name + '; ' + model_name)
+        plt.savefig(my_utils.PATH_TO_PARKINSON_LOG + method_name + '/' + model_name + '/as_ALE.png')
         plt.clf()
 
         # shap.plots._waterfall.waterfall_legacy(explainer.expected_value[0], shap_values[0], data_for_prediction,
