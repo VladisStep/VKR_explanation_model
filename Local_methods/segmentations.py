@@ -22,6 +22,7 @@ VALID_DIR = CONTENT_DIR + '/valid'
 IMAGE_SHAPE = 128
 
 image_path = "/dog/dog.25.jpg"
+# image_path = "/cat/cat.2095.jpg"
 
 def processImgToModel(image_path):
     return image.img_to_array(load_img(
