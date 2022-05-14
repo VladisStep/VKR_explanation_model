@@ -20,6 +20,7 @@ def load_hand_pd():
     Y = np.array(df.iloc[:, label_index])
     X = df.drop(["CLASS_TYPE", "IMAGE_NAME", "_ID_EXAM", "ID_PATIENT"], axis=1)
     feature_names = X.columns
-    target_names = set(Y)
+    target_names = ["healthy", "parkinson"]
+    # target_names = set(Y)
 
     return X, Y, feature_names, target_names

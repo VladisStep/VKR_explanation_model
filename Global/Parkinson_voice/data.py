@@ -25,12 +25,12 @@ def load_parkinson_voice():
             corr_value = df_corr.iloc[feature_column][feature_row]
             if corr_value > 0.67:
                 higly_correlated_features.add(feature_row_name)
-    # print(higly_correlated_features)
     df = df.drop(higly_correlated_features, axis=1)
 
     X = df.drop(['status'], axis=1).values
     Y = df['status'].values
-    target_names = set(Y)
+    # target_names = set(Y)
+    target_names = ["healthy person", "parkinsons positive"]
 
     return X, Y, df.drop(['status'], axis=1).columns, target_names
 

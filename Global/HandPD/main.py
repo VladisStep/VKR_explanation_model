@@ -60,7 +60,7 @@ class HandPDShap:
         plt.savefig(my_utils.PATH_TO_HANDPD_LOG + method_name + '/' + model_name + '/dependence.png')
         plt.clf()
 
-        fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(16, 12))
+        fig, axes = plt.subplots(nrows=2, ncols=6, figsize=(30, 8))
         feature_ind = 0
 
         for j in range(axes.shape[0]):

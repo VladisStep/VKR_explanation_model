@@ -11,5 +11,5 @@ weighted avg       0.44      0.44      0.44        32
 
 The accuracy of this model is :	0.4375
 Mean Squared Error: 0.5625
-Time spent training the model, seconds: 0.0019724369049072266
-Time spent training the model and explaining the result, seconds: 98.24300575256348
+Time spent training the model, seconds: 0.0019936561584472656
+Time spent training the model and explaining the result, seconds: 98.60993576049805

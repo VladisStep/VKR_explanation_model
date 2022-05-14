@@ -5,6 +5,7 @@ from Global.HandPD.ALE_method import HandPdALE
 from Global.Models.BAG_model import create_BAG
 from Global.Models.ETC_model import create_ETC
 from Global.Models.KNN_model import create_KNN
+from Global.Models.NBC_model import create_NBC
 from Global.Models.NN_model import create_NN
 from Global.Models.RFC_model import create_RFC
 from Global.Models.SVM_model import create_SVM
@@ -28,6 +29,7 @@ class MyALE:
         self.NN_model_filename = self.path_to_project + 'Global/Trained_models/NN.joblib'
         self.BAG_model_filename = self.path_to_project + 'Global/Trained_models/BAG.joblib'
         self.ETC_model_filename = self.path_to_project + 'Global/Trained_models/ETC.joblib'
+        self.NBC_model_filename = self.path_to_project + 'Global/Trained_models/NBC.joblib'
         self.dataset_obj = dataset_obj
         self.method_name = 'ALE'
 
@@ -60,12 +62,12 @@ class MyALE:
         print_time(time_start, time_end, my_utils.PATH_TO_GLOBAL + self.dataset_obj.dataset_name
                    + '/Log/' + self.method_name + '/NN/log.txt')
 
-        print('BAG')
-        time_start = time.time()
-        self.dataset_obj.calculate_ale(is_need_to_create_model, create_BAG, "BAG", self.BAG_model_filename)
-        time_end = time.time()
-        print_time(time_start, time_end, my_utils.PATH_TO_GLOBAL + self.dataset_obj.dataset_name
-                   + '/Log/' + self.method_name + '/BAG/log.txt')
+        # print('BAG')
+        # time_start = time.time()
+        # self.dataset_obj.calculate_ale(is_need_to_create_model, create_BAG, "BAG", self.BAG_model_filename)
+        # time_end = time.time()
+        # print_time(time_start, time_end, my_utils.PATH_TO_GLOBAL + self.dataset_obj.dataset_name
+        #            + '/Log/' + self.method_name + '/BAG/log.txt')
 
         print('ETC')
         time_start = time.time()
@@ -73,6 +75,13 @@ class MyALE:
         time_end = time.time()
         print_time(time_start, time_end, my_utils.PATH_TO_GLOBAL + self.dataset_obj.dataset_name
                    + '/Log/' + self.method_name + '/ETC/log.txt')
+
+        print('NBC')
+        time_start = time.time()
+        self.dataset_obj.calculate_ale(is_need_to_create_model, create_NBC, "NBC", self.NBC_model_filename)
+        time_end = time.time()
+        print_time(time_start, time_end, my_utils.PATH_TO_GLOBAL + self.dataset_obj.dataset_name
+                   + '/Log/' + self.method_name + '/NBC/log.txt')
 
 
 if __name__ == "__main__":
@@ -88,7 +97,7 @@ if __name__ == "__main__":
     myale = MyALE(parkinson_voice)
     myale.ale(is_need_to_create)
 
-    # -------------- IRIS --------------
+    # # -------------- IRIS --------------
     test_dataset = TestALE()
     test_dataset.iris()
     myale = MyALE(test_dataset)

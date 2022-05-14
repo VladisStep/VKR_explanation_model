@@ -74,45 +74,71 @@ def bench(is_need_to_create, model_filename):
     results = {}
     explanation_error_arr = []
     local_accuracy_arr = []
+    ind = 0
 
     for name, exp in explainers:
         shap_values = exp.shap_values(X_eval)
-        smasker = shap.benchmark.ExplanationError(masker, model.predict, shap_values[0])
-        explanation_error_arr.append(smasker(shap_values[0], name=name))
+        a = shap_values[ind]
+        smasker = shap.benchmark.ExplanationError(masker, model.predict, shap_values[ind])
+        explanation_error_arr.append(smasker(shap_values[ind], name=name))
         local_accuracy_arr.append(
             shap.benchmark.BenchmarkResult(
-                "local accuracy", name, value=local_accuracy(X_train, X_test, shap_values[0], score_map, model)
+                "local accuracy", name, value=local_accuracy(X_train, X_test, shap_values[ind], score_map, model)
             )
         )
 
     ale = ALE(model.predict_proba, feature_names=feature_names, target_names=target_names)
     exp = ale.explain(X_train)
-    ale_values = exp.ale_values
-    # ale_values = ale.explain(X_eval, min_bin_points=X_eval.shape[0])
+    # ale_values = exp.ale_values
+    # tmp = []
+    # for j in range(len(ale_values)):
+    #     tmp2 = []
+    #     for m in range(ale_values[j].shape[0]):
+    #         tmp2.append((ale_values[j])[m][ind])
+    #     tmp.append(tmp2)
+    # new_ale_values = []
+    # min_len = len(tmp[0])
+    # for j in tmp:
+    #     if len(j) < min_len:
+    #         min_len = len(j)
+    # for j in range(min_len):
+    #     tmp2 = []
+    #     for m in range(len(tmp)):
+    #         tmp2.append(tmp[m][j])
+    #     new_ale_values.append(tmp2)
+    # new_ale_values = np.array(new_ale_values)
+    # smasker = shap.benchmark.ExplanationError(masker, model.predict, new_ale_values)
+    # explanation_error_arr.append(smasker(new_ale_values, name='ALE'))
+    # local_accuracy_arr.append(
+    #     shap.benchmark.BenchmarkResult(
+    #         "local accuracy", 'ALE', value=local_accuracy(X_train, X_test[:min_len], new_ale_values, score_map, model)
+    #     )
+    # )
+    a0 = exp.ale_values[0]
+    a1 = exp.ale_values[1]
+    a2 = exp.ale_values[2]
+    a3 = exp.ale_values[3]
 
-    new_ale_values = []
-    for i in range(target_names.size):
-        tmp = []
-        for j in range(len(ale_values)):
-            tmp2 = []
-            for k in range(ale_values[j].shape[0]):
-                tmp3 = []
-                for l in range(ale_values[j].shape[1]):
-                    tmp3.append((ale_values[j])[k][l])
-                tmp2.append(np.array(tmp3))
-            tmp.append(np.array(tmp2))
-        new_ale_values.append(tmp)
-
-    new_ale_values = np.array(new_ale_values)
-    smasker = shap.benchmark.ExplanationError(masker, model.predict, new_ale_values[0])
-    explanation_error_arr.append(smasker(new_ale_values[0], name='ALE'))
+    max_shape = [0, 0]
+    for a in [a0, a1, a2, a3]:
+        if max_shape[0] < a.shape[0]:
+            max_shape[0] = a.shape[0]
+        if max_shape[1] < a.shape[1]:
+            max_shape[1] = a.shape[1]
+    arrays = []
+    for a in [a0, a1, a2, a3]:
+        arrays.append(np.pad(a, pad_width=((0, max_shape[0] - a.shape[0]),
+                                           (0, max_shape[1] - a.shape[1])),
+                             mode='constant'))
+    stacked_array = np.stack(arrays)
+    ale_values = np.transpose(stacked_array, [2, 1, 0])
+    smasker = shap.benchmark.ExplanationError(masker, model.predict, ale_values[ind])
+    explanation_error_arr.append(smasker(ale_values[ind], name='ALE'))
     local_accuracy_arr.append(
         shap.benchmark.BenchmarkResult(
-            "local accuracy", 'ALE', value=local_accuracy(X_train, X_test, new_ale_values[0], score_map, model)
+            "local accuracy", 'ALE', value=local_accuracy(X_train, X_test[:14], ale_values[ind], score_map, model)
         )
     )
-
-    # TODO: metric for ALE
 
     """   This benchmark metric measures the discrepancy between the output of the model predicted by an
        attribution explanation vs. the actual output of the model.  """

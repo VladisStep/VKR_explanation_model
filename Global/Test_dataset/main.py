@@ -55,21 +55,22 @@ class TestDatasetShap:
         self.target_names = list(set(Y))
         self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(X, Y, random_state=0)
         self.path_to_log = my_utils.PATH_TO_FOOTBALL
-        self.nrows = 6
-        self.ncols = 3
-        self.figwidth = 18
-        self.figheight = 14
+        self.nrows = 9
+        self.ncols = 2
+        self.figwidth = 14
+        self.figheight = 28
 
     def heart_failure(self):
         self.dataset_name = self.dataset_name + '/Heart_failure'
         X, Y, self.feature_names = load_heart_failure()
         self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(X, Y, random_state=0)
-        self.target_names = list(set(Y))
+        # self.target_names = list(set(Y))
+        self.target_names = ["not dead", "dead"]
         self.path_to_log = my_utils.PATH_TO_HEART_FAILURE
-        self.nrows = 4
-        self.ncols = 3
-        self.figwidth = 16
-        self.figheight = 12
+        self.nrows = 2
+        self.ncols = 6
+        self.figwidth = 30
+        self.figheight = 8
 
     def shap(self, is_need_to_create_model, chosen_instance, create_foo, model_name, model_filename, explainer,
              isKernelExplainer):

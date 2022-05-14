@@ -61,7 +61,7 @@ class ParkinsonVoiceShap:
         plt.savefig(my_utils.PATH_TO_PARKINSON_LOG + method_name + '/' + model_name + '/summary.png')
         plt.clf()
 
-        fig, axes = plt.subplots(nrows=4, ncols=2, figsize=(16, 12))
+        fig, axes = plt.subplots(nrows=2, ncols=4, figsize=(20, 8))
         feature_ind = 0
 
         for j in range(axes.shape[0]):

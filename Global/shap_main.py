@@ -6,6 +6,7 @@ import my_utils
 from Global.Models.BAG_model import create_BAG
 from Global.Models.ETC_model import create_ETC
 from Global.Models.KNN_model import create_KNN
+from Global.Models.NBC_model import create_NBC
 from Global.Models.NN_model import create_NN
 from Global.Models.RFC_model import create_RFC
 from Global.Models.SVM_model import create_SVM
@@ -31,6 +32,7 @@ class MyShap:
         self.NN_model_filename = self.path_to_project + 'Global/Trained_models/NN.joblib'
         self.ENS_model_filename = self.path_to_project + 'Global/Trained_models/BAG.joblib'
         self.ETC_model_filename = self.path_to_project + 'Global/Trained_models/ETC.joblib'
+        self.NBC_model_filename = self.path_to_project + 'Global/Trained_models/NBC.joblib'
         self.dataset_obj = dataset_obj
 
     def shap_svm(self, is_need_to_create_model, chosen_instance, explainer, is_kernel_explainer):
@@ -57,13 +59,17 @@ class MyShap:
         self.dataset_obj.shap(is_need_to_create_model, chosen_instance, create_ETC, "ETC", self.ETC_model_filename,
                               explainer, is_kernel_explainer)
 
+    def shap_nbc(self, is_need_to_create_model, chosen_instance, explainer, is_kernel_explainer):
+        self.dataset_obj.shap(is_need_to_create_model, chosen_instance, create_NBC, "NBC", self.NBC_model_filename,
+                              explainer, is_kernel_explainer)
+
     def shap(self, is_need_to_create_model, chosen_instance, explainer, is_kernel_explainer):
         if is_kernel_explainer:
             method_name = 'KernelExplainer'
         else:
             method_name = 'TreeExplainer'
 
-        if is_kernel_explainer:  # TreeExplainer don't support SVM
+        if is_kernel_explainer:  # TreeExplainer doesn't support SVM
             print('SVM')
             time_start = time.time()
             self.shap_svm(is_need_to_create_model=is_need_to_create_model, chosen_instance=chosen_instance,
@@ -80,7 +86,7 @@ class MyShap:
         print_time(time_start, time_end, my_utils.PATH_TO_GLOBAL + self.dataset_obj.dataset_name
                    + '/Log/' + method_name + '/RFC/log.txt')
 
-        if is_kernel_explainer:  # TreeExplainer don't support KNN
+        if is_kernel_explainer:  # TreeExplainer doesn't support KNN
             print('KNN')
             time_start = time.time()
             self.shap_knn(is_need_to_create_model=is_need_to_create_model, chosen_instance=chosen_instance,
@@ -89,7 +95,7 @@ class MyShap:
             print_time(time_start, time_end, my_utils.PATH_TO_GLOBAL + self.dataset_obj.dataset_name
                        + '/Log/' + method_name + '/KNN/log.txt')
 
-        if is_kernel_explainer:  # TreeExplainer don't support NN
+        if is_kernel_explainer:  # TreeExplainer doesn't support NN
             print('NN')
             time_start = time.time()
             self.shap_nn(is_need_to_create_model=is_need_to_create_model, chosen_instance=chosen_instance,
@@ -98,14 +104,15 @@ class MyShap:
             print_time(time_start, time_end, my_utils.PATH_TO_GLOBAL + self.dataset_obj.dataset_name
                        + '/Log/' + method_name + '/NN/log.txt')
 
-        if is_kernel_explainer:  # TreeExplainer don't support BAG
-            print('BAG')
-            time_start = time.time()
-            self.shap_bag(is_need_to_create_model=is_need_to_create_model, chosen_instance=chosen_instance,
-                          explainer=explainer, is_kernel_explainer=is_kernel_explainer)
-            time_end = time.time()
-            print_time(time_start, time_end, my_utils.PATH_TO_GLOBAL + self.dataset_obj.dataset_name
-                       + '/Log/' + method_name + '/BAG/log.txt')
+        # ------------- НЕ ИСПОЛЬЗУЕТСЯ --------------
+        # if is_kernel_explainer:  # TreeExplainer doesn't support BAG
+        #     print('BAG')
+        #     time_start = time.time()
+        #     self.shap_bag(is_need_to_create_model=is_need_to_create_model, chosen_instance=chosen_instance,
+        #                   explainer=explainer, is_kernel_explainer=is_kernel_explainer)
+        #     time_end = time.time()
+        #     print_time(time_start, time_end, my_utils.PATH_TO_GLOBAL + self.dataset_obj.dataset_name
+        #                + '/Log/' + method_name + '/BAG/log.txt')
 
         print('ETC')
         time_start = time.time()
@@ -114,6 +121,15 @@ class MyShap:
         time_end = time.time()
         print_time(time_start, time_end, my_utils.PATH_TO_GLOBAL + self.dataset_obj.dataset_name
                    + '/Log/' + method_name + '/ETC/log.txt')
+
+        if is_kernel_explainer:  # TreeExplainer doesn't support NBC
+            print('NBC')
+            time_start = time.time()
+            self.shap_nbc(is_need_to_create_model=is_need_to_create_model, chosen_instance=chosen_instance,
+                          explainer=explainer, is_kernel_explainer=is_kernel_explainer)
+            time_end = time.time()
+            print_time(time_start, time_end, my_utils.PATH_TO_GLOBAL + self.dataset_obj.dataset_name
+                       + '/Log/' + method_name + '/NBC/log.txt')
 
 
 if __name__ == "__main__":

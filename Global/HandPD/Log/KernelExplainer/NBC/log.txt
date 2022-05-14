@@ -1,0 +1,15 @@
+KernelExplainer; NBC:
+Prediction: [[9.99428403e-01 5.71597119e-04]]
+              precision    recall  f1-score   support
+
+           0       0.18      0.94      0.31        34
+           1       0.78      0.05      0.09       150
+
+    accuracy                           0.21       184
+   macro avg       0.48      0.49      0.20       184
+weighted avg       0.67      0.21      0.13       184
+
+The accuracy of this model is :	0.21195652173913043
+Mean Squared Error: 0.7880434782608695
+Time spent training the model, seconds: 0.0029909610748291016
+Time spent training the model and explaining the result, seconds: 199.04523587226868

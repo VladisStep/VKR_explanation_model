@@ -1,15 +1,15 @@
 KernelExplainer; RFC:
-Prediction: [[0.39 0.61]]
+Prediction: [[0.34 0.66]]
               precision    recall  f1-score   support
 
-           0       0.73      0.53      0.62        15
-           1       0.67      0.82      0.74        17
+           0       0.54      0.47      0.50        15
+           1       0.58      0.65      0.61        17
 
-    accuracy                           0.69        32
-   macro avg       0.70      0.68      0.68        32
-weighted avg       0.70      0.69      0.68        32
+    accuracy                           0.56        32
+   macro avg       0.56      0.56      0.56        32
+weighted avg       0.56      0.56      0.56        32
 
-The accuracy of this model is :	0.6875
-Mean Squared Error: 0.3125
-Time spent training the model, seconds: 0.13299942016601562
-Time spent training the model and explaining the result, seconds: 159.61582446098328
+The accuracy of this model is :	0.5625
+Mean Squared Error: 0.4375
+Time spent training the model, seconds: 0.11964964866638184
+Time spent training the model and explaining the result, seconds: 159.73756098747253

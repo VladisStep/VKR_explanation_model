@@ -14,6 +14,7 @@ path_to_project = my_utils.path_to_project
 
 def compute_time_ale(time_start, model, feature_names, target_names, X, model_str):
     ale = ALE(model.predict_proba, feature_names=feature_names, target_names=target_names)
+    exp = ale.explain(X)
     time_end = time.time()
 
     s = '----\nALE ' + model_str + ' compute time:\n' + str(time_end - time_start) + '\n'
@@ -74,26 +75,26 @@ def compute_time_with_model(model_filename, create_foo, feature_names, target_na
 if __name__ == "__main__":
     BAG_model_filename = path_to_project + 'Global/Trained_models/BAG.joblib'
 
-    # data = load_iris()
-    #
-    # compute_time_with_model(BAG_model_filename, create_RFC, data.feature_names, data.target_names,
-    #                         data.data, data.target, 'ALE')
-    # compute_time_without_model(BAG_model_filename, data.feature_names, data.target_names, data.data, 'ALE')
-    #
-    # compute_time_with_model(BAG_model_filename, create_RFC, data.feature_names, data.target_names,
-    #                         data.data, data.target, 'KE')
-    # compute_time_without_model(BAG_model_filename, data.feature_names, data.target_names, data.data, 'KE')
-    #
-    # compute_time_with_model(BAG_model_filename, create_RFC, data.feature_names, data.target_names,
-    #                         data.data, data.target, 'TE')
-    # compute_time_without_model(BAG_model_filename, data.feature_names, data.target_names, data.data, 'TE')
+    data = load_iris()
 
-    X, Y, feature_names, target_names = load_hand_pd()
-    compute_time_with_model(BAG_model_filename, create_RFC, feature_names, target_names, X, Y, 'ALE')
-    compute_time_without_model(BAG_model_filename, feature_names, target_names, X, 'ALE')
+    compute_time_with_model(BAG_model_filename, create_RFC, data.feature_names, data.target_names,
+                            data.data, data.target, 'ALE')
+    compute_time_without_model(BAG_model_filename, data.feature_names, data.target_names, data.data, 'ALE')
 
-    compute_time_with_model(BAG_model_filename, create_RFC, feature_names, target_names, X, Y, 'KE')
-    compute_time_without_model(BAG_model_filename, feature_names, target_names, X, 'KE')
+    compute_time_with_model(BAG_model_filename, create_RFC, data.feature_names, data.target_names,
+                            data.data, data.target, 'KE')
+    compute_time_without_model(BAG_model_filename, data.feature_names, data.target_names, data.data, 'KE')
 
-    compute_time_with_model(BAG_model_filename, create_RFC, feature_names, target_names, X, Y, 'TE')
-    compute_time_without_model(BAG_model_filename, feature_names, target_names, X, 'TE')
+    compute_time_with_model(BAG_model_filename, create_RFC, data.feature_names, data.target_names,
+                            data.data, data.target, 'TE')
+    compute_time_without_model(BAG_model_filename, data.feature_names, data.target_names, data.data, 'TE')
+
+    # X, Y, feature_names, target_names = load_hand_pd()
+    # compute_time_with_model(BAG_model_filename, create_RFC, feature_names, target_names, X, Y, 'ALE')
+    # compute_time_without_model(BAG_model_filename, feature_names, target_names, X, 'ALE')
+    #
+    # compute_time_with_model(BAG_model_filename, create_RFC, feature_names, target_names, X, Y, 'KE')
+    # compute_time_without_model(BAG_model_filename, feature_names, target_names, X, 'KE')
+    #
+    # compute_time_with_model(BAG_model_filename, create_RFC, feature_names, target_names, X, Y, 'TE')
+    # compute_time_without_model(BAG_model_filename, feature_names, target_names, X, 'TE')
